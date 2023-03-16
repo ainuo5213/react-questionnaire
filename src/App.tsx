@@ -6,8 +6,15 @@ function App() {
   const [count, setCount] = useState(0)
   const a = 10
 
+  function onButtonClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log(e.target)
+  }
+
   return (
     <div className="App">
+      <button onClick={onButtonClick}>click</button>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src="/vite.svg" className="logo" alt="Vite logo" />
