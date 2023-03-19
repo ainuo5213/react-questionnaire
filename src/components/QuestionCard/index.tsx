@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 type QuestionCardDataType = {
   id: string
@@ -13,6 +13,12 @@ type QuestionCardPropType = {
 }
 
 export default function QuestionCard(prop: QuestionCardPropType) {
+  //   useEffect(() => {
+  //     console.log('问卷卡片加载了')
+  //     return () => {
+  //       console.log('问卷卡片卸载了')
+  //     }
+  //   }, [])
   return (
     <div>
       <strong>{prop.data.title}</strong>
