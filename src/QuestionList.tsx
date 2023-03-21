@@ -1,6 +1,7 @@
 import { produce } from 'immer'
 import React, { useEffect, useRef, useState } from 'react'
 import QuestionCard from './components/QuestionCard'
+import useTitle from './hooks/useTitle'
 
 export default function QuestionList() {
   const [questionList, setQuestionList] = useState<
@@ -73,8 +74,17 @@ export default function QuestionList() {
   const userRef = useRef('孙一个')
   function onChangeName() {
     userRef.current = '孙永刚'
+    setTitle('sddd')
     console.log(userRef.current)
   }
+  const [title, setTitle] = useState('测试页面')
+
+  useTitle(title)
+
+  const testRef = useRef<HTMLDivElement>()
+  useEffect(() => {
+    console.log(document.querySelector('#test'), testRef.current)
+  }, [])
 
   return (
     <div>
@@ -89,7 +99,7 @@ export default function QuestionList() {
         )
       })}
       <button onClick={onQuestionCreate}>新增问卷</button>
-      <div>
+      <div id="test" ref={testRef}>
         <span>{userRef.current}</span>
         <button onClick={onChangeName}>change name</button>
       </div>
