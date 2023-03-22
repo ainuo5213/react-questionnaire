@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import QuestionList from './QuestionList'
+import QuestionList from './pages/QuestionList'
 
 function App() {
   return (
