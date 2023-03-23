@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { Response } from '@/types'
 import { message } from 'antd'
+import { alertError } from '@/utils/log'
 
 const instance = axios.create({
   baseURL: '',
@@ -13,6 +14,7 @@ instance.interceptors.request.use(
     return config
   },
   function (error) {
+    alertError(error)
     return Promise.reject(error)
   }
 )
@@ -22,6 +24,7 @@ instance.interceptors.response.use(
     return response.data
   },
   function (error) {
+    alertError(error)
     return Promise.reject(error)
   }
 )
@@ -37,8 +40,7 @@ export default async function <T = any>(config: AxiosRequestConfig): Promise<T> 
       return Promise.reject(data.message)
     }
   } catch (err) {
-    const msg = err instanceof Error ? err.message : (err as string)
-    message.error(msg)
+    alertError(err)
     return Promise.reject(err)
   }
 }
