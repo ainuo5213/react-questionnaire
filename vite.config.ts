@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { config } from 'dotenv'
+import path from 'path'
 config({
-  path: './.env.local'
+  path: path.join(__dirname, '.env.local')
 })
 
 // https://vitejs.dev/config/
@@ -18,7 +19,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': 'src'
+      '@': path.resolve(__dirname, 'src')
     }
   }
 })

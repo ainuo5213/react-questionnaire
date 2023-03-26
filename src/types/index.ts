@@ -1,6 +1,6 @@
-export type PaginationWrapper<T = unknown> = {
-  data: T[]
+export type PaginationWrapper<T> = {
   total: number
+  result: T[]
 }
 
 export type Response<T> = {
