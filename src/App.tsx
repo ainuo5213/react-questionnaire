@@ -1,12 +1,9 @@
 import React from 'react'
-import QuestionList from './pages/QuestionList'
+import { RouterProvider } from 'react-router-dom'
+import { router as routeConfig } from '@/router'
 
 function App() {
-  return (
-    <div className="App">
-      <QuestionList></QuestionList>
-    </div>
-  )
+  return <RouterProvider router={routeConfig}></RouterProvider>
 }
 
 export default App
