@@ -10,6 +10,7 @@ config({
 export default defineConfig({
   plugins: [react()],
   server: {
+    open: false,
     proxy: {
       '/api': {
         target: `https://mock.presstime.cn/mock/${process.env.REACT_APP_Mock_Project_ID}`,
@@ -21,5 +22,9 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, 'src')
     }
+  },
+  define: {
+    _author: '"ainuo5213"',
+    _siteTitle: '"ainuo的问卷调查"'
   }
 })
