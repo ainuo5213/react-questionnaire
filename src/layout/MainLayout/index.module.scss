@@ -4,15 +4,18 @@
     box-sizing: border-box;
     .left {
         float: left;
+        height: 100%;
     }
 
     .right {
         float: right;
+        height: 100%;
     }
 }
 
 .main {
     min-height: calc(100vh - 64px - 72px);
+    position: relative;
 }
 
 .footer {

@@ -1,4 +1,6 @@
 import CopyRight from '@/components/CopyRight'
+import Logo from '@/components/Logo'
+import Profile from '@/components/Profile'
 import { Layout } from 'antd'
 import React, { useMemo } from 'react'
 import { Outlet } from 'react-router-dom'
@@ -8,8 +10,12 @@ export default function MainLayout() {
   return (
     <Layout>
       <Layout.Header className={styles.header}>
-        <div className={styles.left}>logo</div>
-        <div className={styles.right}>profile</div>
+        <div className={styles.left}>
+          <Logo></Logo>
+        </div>
+        <div className={styles.right}>
+          <Profile></Profile>
+        </div>
       </Layout.Header>
       <Layout.Content className={styles.main}>
         <Outlet></Outlet>
