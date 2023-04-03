@@ -3,8 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "vite --mode development",
+    "build:dev": "tsc && vite build --mode development",
+    "build:test": "tsc && vite build --mode test",
+    "build": "tsc && vite build --mode production",
     "preview": "vite preview",
     "lint": "eslint 'src/**/*.+(js|ts|jsx|tsx)'",
     "format": "prettier --write 'src/**/*.+(js|ts|jsx|tsx)'",

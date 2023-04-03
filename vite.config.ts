@@ -1,30 +1,40 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type ConfigEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { config } from 'dotenv'
 import path from 'path'
-config({
-  path: path.join(__dirname, '.env.local')
-})
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    open: false,
-    proxy: {
-      '/api': {
-        target: `https://mock.presstime.cn/mock/${process.env.REACT_APP_Mock_Project_ID}`,
-        changeOrigin: true
+export default defineConfig(({ mode }: ConfigEnv) => {
+  config({
+    path: path.join(__dirname, `.env.${mode}`)
+  })
+  const {
+    REACT_APP_MOCK_URL: mockBaseURL,
+    REACT_APP_BASE_URL: baseURL,
+    REACT_APP_MOCK_PROJECT_ID: mockProjectId,
+    REACT_APP_USE_MOCK: useMock
+  } = process.env
+
+  return {
+    plugins: [react()],
+    server: {
+      open: false,
+      proxy: {
+        '/api': {
+          target:
+            useMock!.toLocaleLowerCase() === 'true' ? `${mockBaseURL}/${mockProjectId}` : baseURL,
+          changeOrigin: true
+        }
       }
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src')
+      }
+    },
+    define: {
+      _author: '"ainuo5213"',
+      _siteTitle: '"ainuo的问卷调查"'
     }
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
-  },
-  define: {
-    _author: '"ainuo5213"',
-    _siteTitle: '"ainuo的问卷调查"'
   }
 })
