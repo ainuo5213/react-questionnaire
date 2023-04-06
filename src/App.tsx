@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom'
 import { router as routeConfig } from '@/router'
 import { ConfigProvider } from 'antd'
 import zh_CN from 'antd/lib/locale/zh_CN'
+import './styles/index.scss'
 
 function App() {
   return (

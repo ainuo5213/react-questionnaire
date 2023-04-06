@@ -6,3 +6,8 @@ export type QuestionListItem = {
   answerCount: number
   createTime: string
 }
+
+export type QuestionListSearchParameter = {
+  page: number
+  q: string
+}

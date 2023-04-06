@@ -35,6 +35,15 @@ export default defineConfig(({ mode }: ConfigEnv) => {
     define: {
       _author: '"ainuo5213"',
       _siteTitle: '"ainuo的问卷调查"'
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+          @import "src/styles/mixin.scss";
+          `
+        }
+      }
     }
   }
 })

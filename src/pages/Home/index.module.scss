@@ -1,13 +1,5 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  @include abs-center;
   background-image: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
   .info {
     text-align: center;

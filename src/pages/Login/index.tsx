@@ -1,25 +1,80 @@
-import { Button } from 'antd'
-import React, { useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Button, Card, Checkbox, Form, Input, Space, Typography } from 'antd'
+import styles from './index.module.scss'
+import { UserAddOutlined } from '@ant-design/icons'
+import { routePathMap } from '@/router'
+import { Link } from 'react-router-dom'
+import { LoginUserForm } from '@/api/system/user.types'
+import { RememberMe } from '@/constants'
+import useRemember from './useRemember'
+const { Title } = Typography
 export default function Login() {
-  const navigate = useNavigate()
-  const [searchParams, setSearchParams] = useSearchParams()
-  console.log(searchParams.get('test'))
-  useEffect(() => {
-    setTimeout(() => {
-      setSearchParams({
-        test: '3'
-      })
-      console.log(searchParams.get('test'))
-    }, 200)
-  }, [])
+  const [formRef] = Form.useForm()
+  const { formData, setFormData } = useRemember<LoginUserForm>(RememberMe, {
+    onLoaded(value) {
+      formRef.setFieldsValue(value)
+    }
+  })
 
+  function handleFormFinish(form: LoginUserForm) {
+    setFormData(form)
+  }
   return (
-    <div>
-      <p>这是登陆页面</p>
-      <Button type="primary" onClick={() => navigate(-1)}>
-        返回
-      </Button>
+    <div className={styles.container}>
+      <Card className={styles.card}>
+        <div className={styles.header}>
+          <Space>
+            <Title level={2}>
+              <UserAddOutlined></UserAddOutlined>
+            </Title>
+            <Title level={2}>注册新用户</Title>
+          </Space>
+        </div>
+        <div className={styles.content}>
+          <Form
+            name="basic"
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 24 }}
+            style={{ maxWidth: 600 }}
+            autoComplete="off"
+            onFinish={handleFormFinish}
+            initialValues={formData}
+            form={formRef}
+          >
+            <Form.Item
+              label="用户名"
+              name="username"
+              rules={[{ required: true, message: '请输入用户名' }]}
+            >
+              <Input></Input>
+            </Form.Item>
+            <Form.Item
+              label="密码"
+              name="password"
+              rules={[{ required: true, message: '请输入密码' }]}
+            >
+              <Input.Password></Input.Password>
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 6 }} name="remember" valuePropName="checked">
+              <Checkbox>记住我</Checkbox>
+            </Form.Item>
+            <Form.Item
+              wrapperCol={{
+                offset: 6
+              }}
+            >
+              <Space>
+                <Button type="primary" htmlType="submit">
+                  注册
+                </Button>
+                <span>
+                  还没有账号？<Link to={routePathMap.register}>去注册</Link>
+                </span>
+              </Space>
+            </Form.Item>
+          </Form>
+        </div>
+      </Card>
     </div>
   )
 }
