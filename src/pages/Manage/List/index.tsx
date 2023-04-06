@@ -14,10 +14,6 @@ const { Title } = Typography
 
 const QuestionList = function () {
   const [urlSearchParameter] = useSearchParams()
-  const [searchParameter, setSearchParameter] = useState<QuestionListSearchParameter>({
-    page: +(urlSearchParameter.get('page') || 1),
-    q: urlSearchParameter.get('q') || ''
-  })
   const { loading, runAsync } = useRequest(getQuestionires, {
     manual: true
   })
@@ -26,14 +22,12 @@ const QuestionList = function () {
     result: []
   })
   useEffect(() => {
-    runAsync(searchParameter).then(data => {
-      setQuestions(data)
-    })
-  }, [searchParameter])
-  useEffect(() => {
-    setSearchParameter({
+    const searchParameter = {
       page: +(urlSearchParameter.get('page') || 1),
       q: urlSearchParameter.get('q') || ''
+    } as QuestionListSearchParameter
+    runAsync(searchParameter).then(data => {
+      setQuestions(data)
     })
   }, [urlSearchParameter])
   useTitle(`${_siteTitle} - ${routeNameMap.manageList}`)
