@@ -9,6 +9,7 @@ import { Empty, Spin, Typography } from 'antd'
 import { routeNameMap } from '@/router'
 import ListSearch from '@/components/ListSearch'
 import { useSearchParams } from 'react-router-dom'
+import LoadFeedback from '@/components/LoadFeedback'
 
 const { Title } = Typography
 
@@ -45,15 +46,15 @@ const QuestionList = function () {
         </div>
       </div>
       <div className={styles.content}>
-        {loading ? (
-          <Spin className={styles.spin}></Spin>
-        ) : questions.total === 0 ? (
-          <Empty></Empty>
-        ) : (
-          questions.result.map(r => {
-            return <QuestionCard key={r.id} data={r}></QuestionCard>
-          })
-        )}
+        <LoadFeedback loading={loading}>
+          {questions.total === 0 ? (
+            <Empty></Empty>
+          ) : (
+            questions.result.map(r => {
+              return <QuestionCard key={r.id} data={r}></QuestionCard>
+            })
+          )}
+        </LoadFeedback>
       </div>
       <div className={styles.footer}>load more</div>
     </>
