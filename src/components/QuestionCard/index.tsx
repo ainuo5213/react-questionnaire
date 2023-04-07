@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Divider, Space, Tag, Popconfirm, notification, Modal } from 'antd'
-import { questionnairenaireListItem } from '@/api/questionnairenaire/questionnairenaire.types'
+import { QuestionnaireListItem } from '@/api/questionnaire/questionnaire.types'
 import styles from './index.module.scss'
 import {
   EditOutlined,
@@ -16,7 +16,7 @@ import { routePathMap } from '@/router'
 import { join } from 'path-browserify'
 import classNames from 'classnames'
 type questionnaireCardProp = {
-  data: questionnairenaireListItem
+  data: QuestionnaireListItem
 }
 
 const { confirm } = Modal
