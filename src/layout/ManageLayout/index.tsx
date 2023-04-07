@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-design/icons'
 import styles from './index.module.scss'
 import { routePathMap } from '@/router'
+import { createQuestionire } from '@/api/questionnaire/questionnaire'
 
 export default function ManageLayout() {
   const navigate = useNavigate()
@@ -15,11 +16,20 @@ export default function ManageLayout() {
     [pathname]
   )
 
+  async function handleCreateQuestion() {
+    const id = await createQuestionire()
+    if (id) {
+      navigate({
+        pathname: routePathMap.questionnaireEdit
+      })
+    }
+  }
+
   return (
     <Row className={styles.container}>
       <Col span={4}>
         <Space direction="vertical">
-          <Button type="primary" size="large" icon={<PlusOutlined></PlusOutlined>}>
+          <Button onClick={handleCreateQuestion} type="primary" size="large" icon={<PlusOutlined></PlusOutlined>}>
             创建问卷
           </Button>
           <Divider></Divider>

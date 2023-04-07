@@ -2,26 +2,32 @@ import { defineConfig, type ConfigEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { config } from 'dotenv'
 import path from 'path'
-
+import { exec } from 'child_process'
 export default defineConfig(({ mode }: ConfigEnv) => {
   config({
     path: path.join(__dirname, `.env.${mode}`)
   })
   const {
-    REACT_APP_MOCK_URL: mockBaseURL,
-    REACT_APP_BASE_URL: baseURL,
-    REACT_APP_MOCK_PROJECT_ID: mockProjectId,
-    REACT_APP_USE_MOCK: useMock
+    VITE_API_BASE_URL: baseURL,
+    VITE_API_USE_MOCK: useMock,
+    VITE_API_MOCK_URL: mockURL
   } = process.env
-
+  const isMock = useMock ? useMock!.toLocaleLowerCase()=== 'true' : false
+  const isDevelopment = mode === 'development'
+  
+  if (isDevelopment && isMock) {
+    exec('yarn mock')
+  }
+  
   return {
     plugins: [react()],
     server: {
       open: false,
+      https: false,
+      port: 3000,
       proxy: {
         '/api': {
-          target:
-            useMock!.toLocaleLowerCase() === 'true' ? `${mockBaseURL}/${mockProjectId}` : baseURL,
+          target: isMock  ? mockURL : baseURL,
           changeOrigin: true
         }
       }

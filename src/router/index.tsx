@@ -68,18 +68,18 @@ const pathes = [
     ]
   },
   {
-    path: '/question',
+    path: '/questionnaire',
     element: <QuestionLayout></QuestionLayout>,
     children: [
       {
         path: 'edit/:id',
-        name: 'questionEdit',
+        name: 'questionnaireEdit',
         title: '问卷编辑',
         element: <Edit></Edit>
       },
       {
         path: 'stat/:id',
-        name: 'questionStat',
+        name: 'questionnaireStat',
         title: '问卷统计',
         element: <Stat></Stat>
       }

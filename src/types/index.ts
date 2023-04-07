@@ -6,7 +6,7 @@ export type PaginationWrapper<T> = {
 export type Response<T> = {
   message: string
   data: T
-  status: number
+  code: number
 }
 
 export type PruneTypePrefix<T, U extends string> = {

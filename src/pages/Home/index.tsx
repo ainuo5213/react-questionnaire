@@ -6,6 +6,7 @@ import styles from './index.module.scss'
 const { Title, Paragraph } = Typography
 export default function Home() {
   const navigate = useNavigate()
+  
   return (
     <div className={styles.container}>
       <div className={styles.info}>

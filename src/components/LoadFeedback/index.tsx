@@ -18,9 +18,3 @@ export default function LoadFeedback(prop: LoadFeedbackProp) {
     </>
   )
 }
-
-/**
- * display: flex;
-  align-items: center;
-  justify-content: center;
- */

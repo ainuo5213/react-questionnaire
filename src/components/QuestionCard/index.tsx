@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Divider, Space, Tag, Popconfirm, notification, Modal } from 'antd'
-import { QuestionListItem } from '@/api/questionire.types'
+import { questionnairenaireListItem } from '@/api/questionnairenaire/questionnairenaire.types'
 import styles from './index.module.scss'
 import {
   EditOutlined,
@@ -15,12 +15,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { routePathMap } from '@/router'
 import { join } from 'path-browserify'
 import classNames from 'classnames'
-type QuestionCardProp = {
-  data: QuestionListItem
+type questionnaireCardProp = {
+  data: questionnairenaireListItem
 }
 
 const { confirm } = Modal
-const QuestionCard = function ({ data }: QuestionCardProp) {
+const questionnaireCard = function ({ data }: questionnaireCardProp) {
   const navigate = useNavigate()
   const [api, contextHolder] = notification.useNotification()
   function onCopyConfirm() {
@@ -48,8 +48,8 @@ const QuestionCard = function ({ data }: QuestionCardProp) {
           <Link
             to={
               data.isPublished
-                ? join(routePathMap.questionStat, String(data.id))
-                : join(routePathMap.questionEdit, String(data.id))
+                ? join(routePathMap.questionnaireStat, data.id)
+                : join(routePathMap.questionnaireEdit, data.id)
             }
           >
             <Space>
@@ -71,7 +71,7 @@ const QuestionCard = function ({ data }: QuestionCardProp) {
             <Button
               onClick={() =>
                 navigate({
-                  pathname: join(routePathMap.questionEdit, String(data.id))
+                  pathname: join(routePathMap.questionnaireEdit, data.id)
                 })
               }
               size="small"
@@ -81,7 +81,7 @@ const QuestionCard = function ({ data }: QuestionCardProp) {
             <Button
               onClick={() =>
                 navigate({
-                  pathname: join(routePathMap.questionStat, String(data.id))
+                  pathname: join(routePathMap.questionnaireStat, String(data.id))
                 })
               }
               size="small"
@@ -130,4 +130,4 @@ const QuestionCard = function ({ data }: QuestionCardProp) {
   )
 }
 
-export default QuestionCard
+export default questionnaireCard

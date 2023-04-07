@@ -1,3 +1,3 @@
 import test from './test.mjs'
-import question from './question.mjs'
-export default [...test, ...question]
+import questionnaire from './questionnaire.mjs'
+export default [...test, ...questionnaire]

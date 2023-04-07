@@ -2,9 +2,10 @@ import Koa from 'koa'
 import Router from 'koa-router'
 import chalk from 'chalk'
 import MockRoutes from './mock/index.mjs'
+import cors from 'koa-cors'
 const app = new Koa()
 const router = new Router()
-
+app.use(cors())
 function awaitResult(fn) {
   return new Promise(resolve => {
     setTimeout(() => {

@@ -1,10 +1,10 @@
 import { useRequest, useTitle } from 'ahooks'
 import React, { useEffect, useState } from 'react'
-import { getQuestionires } from '@/api/questionire'
+import { getQuestionires } from '@/api/questionnaire/questionnaire'
 import styles from '@/pages/Manage/styles/common.module.scss'
 import QuestionCard from '@/components/QuestionCard'
 import { PaginationWrapper } from '@/types'
-import { QuestionListItem, QuestionListSearchParameter } from '@/api/questionire.types'
+import { QuestionnaireListItem, QuestionnaireListSearchParameter } from '@/api/questionnaire/questionnaire.types'
 import { Empty, Spin, Typography } from 'antd'
 import { routeNameMap } from '@/router'
 import ListSearch from '@/components/ListSearch'
@@ -18,7 +18,7 @@ const QuestionList = function () {
   const { loading, runAsync } = useRequest(getQuestionires, {
     manual: true
   })
-  const [questions, setQuestions] = useState<PaginationWrapper<QuestionListItem>>({
+  const [questions, setQuestions] = useState<PaginationWrapper<QuestionnaireListItem>>({
     total: 0,
     result: []
   })
@@ -26,7 +26,7 @@ const QuestionList = function () {
     const searchParameter = {
       page: +(urlSearchParameter.get('page') || 1),
       q: urlSearchParameter.get('q') || ''
-    } as QuestionListSearchParameter
+    } as QuestionnaireListSearchParameter
     runAsync(searchParameter).then(data => {
       setQuestions(data)
     })

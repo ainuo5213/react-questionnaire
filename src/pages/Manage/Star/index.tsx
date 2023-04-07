@@ -1,10 +1,10 @@
 import { useRequest, useTitle } from 'ahooks'
 import React, { useEffect, useState } from 'react'
-import { getQuestionires } from '@/api/questionire'
+import { getQuestionires } from '@/api/questionnaire/questionnaire'
 import styles from '@/pages/Manage/styles/common.module.scss'
 import QuestionCard from '@/components/QuestionCard'
 import { PaginationWrapper } from '@/types'
-import { QuestionListItem } from '@/api/questionire.types'
+import { QuestionnaireListItem } from '@/api/questionnaire/questionnaire.types'
 import { Typography, Empty, Spin } from 'antd'
 import { routeNameMap } from '@/router'
 
@@ -14,7 +14,7 @@ const QuestionList = function () {
   const { loading, runAsync } = useRequest(getQuestionires, {
     manual: true
   })
-  const [questions, setQuestions] = useState<PaginationWrapper<QuestionListItem>>({
+  const [questions, setQuestions] = useState<PaginationWrapper<QuestionnaireListItem>>({
     total: 0,
     result: []
   })

@@ -1,24 +1,24 @@
 import { useRequest, useTitle } from 'ahooks'
 import React, { useEffect, useState } from 'react'
-import { getQuestionires } from '@/api/questionire'
+import { getQuestionires } from '@/api/questionnaire/questionnaire'
 import styles from '@/pages/Manage/styles/common.module.scss'
 import trashStyles from './index.module.scss'
 import { PaginationWrapper } from '@/types'
-import { QuestionListItem } from '@/api/questionire.types'
+import { QuestionnaireListItem } from '@/api/questionnaire/questionnaire.types'
 import { Typography, Table, Tag, Space, Button, Modal } from 'antd'
 import { routeNameMap } from '@/router'
 import { ColumnsType } from 'antd/es/table'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 
 type TableListProp = {
-  questions: PaginationWrapper<QuestionListItem>
+  questions: PaginationWrapper<QuestionnaireListItem>
   loading: boolean
 }
 const { Title } = Typography
 const { confirm } = Modal
 
 function TableList({ questions, loading }: TableListProp) {
-  const columns: ColumnsType<QuestionListItem> = [
+  const columns: ColumnsType<QuestionnaireListItem> = [
     {
       key: 'title',
       title: '标题',
@@ -51,10 +51,10 @@ function TableList({ questions, loading }: TableListProp) {
       dataIndex: 'createTime'
     }
   ]
-  const [selectedRows, setSelectedRows] = useState<QuestionListItem[]>([])
+  const [selectedRows, setSelectedRows] = useState<QuestionnaireListItem[]>([])
   function handleTableCheckboxChange(
     selectedRowKeys: React.Key[],
-    selectedRows: QuestionListItem[]
+    selectedRows: QuestionnaireListItem[]
   ) {
     setSelectedRows(selectedRows)
     console.log(selectedRows)
@@ -108,7 +108,7 @@ const QuestionList = function () {
     manual: true
   })
 
-  const [questions, setQuestions] = useState<PaginationWrapper<QuestionListItem>>({
+  const [questions, setQuestions] = useState<PaginationWrapper<QuestionnaireListItem>>({
     total: 0,
     result: []
   })

@@ -2,15 +2,19 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { Response } from '@/types'
 import { message } from 'antd'
 import { alertError } from '@/utils/log'
+import { isMock } from './is'
+
 
 const instance = axios.create({
-  baseURL: '',
+  baseURL: isMock() ? import.meta.env.VITE_MOCK_URL! : import.meta.env.VITE_BASE_URL,
   timeout: 10000
 })
 
 instance.interceptors.request.use(
   function (config) {
-    config.headers['Content-Type'] = 'application/json'
+    if (!config.headers['Content-Type']) {
+      config.headers['Content-Type'] = 'application/json'
+    }
     return config
   },
   function (error) {
@@ -34,7 +38,7 @@ export default async function <T = any>(config: AxiosRequestConfig): Promise<T> 
     const response = await instance(config)
     const data = response as unknown as Response<T>
 
-    if (data.status === 200) {
+    if (data.code === 200) {
       return data.data
     } else {
       message.error(data.message)

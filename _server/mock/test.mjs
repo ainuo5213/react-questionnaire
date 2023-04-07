@@ -6,7 +6,7 @@ export default [
     method: 'get',
     response() {
       return {
-        status: 200,
+        code: 200,
         message: '',
         data: {
           name: Random.cname()

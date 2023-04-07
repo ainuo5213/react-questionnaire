@@ -1,5 +1,5 @@
-export type QuestionListItem = {
-  id: number
+export type QuestionnaireListItem = {
+  id: string
   title: string
   isPublished: boolean
   isStar: boolean
@@ -7,7 +7,7 @@ export type QuestionListItem = {
   createTime: string
 }
 
-export type QuestionListSearchParameter = {
+export type QuestionnaireListSearchParameter = {
   page: number
   q: string
 }
