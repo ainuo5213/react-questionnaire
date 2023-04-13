@@ -11,3 +11,12 @@ export type QuestionnaireListSearchParameter = {
   page: number
   q: string
 }
+
+export type QuestionnaireDetail = {
+  id: string
+  title: string
+  isPublished: boolean
+  isStar: boolean
+  answerCount: number
+  createTime: string
+}

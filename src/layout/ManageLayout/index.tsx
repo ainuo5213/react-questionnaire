@@ -5,10 +5,15 @@ import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-d
 import styles from './index.module.scss'
 import { routePathMap } from '@/router'
 import { createQuestionire } from '@/api/questionnaire/questionnaire'
+import { useRequest } from 'ahooks'
+import { join } from 'path-browserify'
 
 export default function ManageLayout() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { loading, runAsync } = useRequest(createQuestionire, {
+    manual: true
+  })
   const useType = useCallback(
     (currentPathname: string) => {
       return pathname.startsWith(currentPathname) ? 'default' : 'text'
@@ -17,19 +22,19 @@ export default function ManageLayout() {
   )
 
   async function handleCreateQuestion() {
-    const id = await createQuestionire()
+    const id = await runAsync()
     if (id) {
       navigate({
-        pathname: routePathMap.questionnaireEdit
+        pathname: join(routePathMap.questionnaireEdit, id),
       })
     }
   }
 
   return (
     <Row className={styles.container}>
-      <Col span={4}>
+      <Col span={4} className={styles.left}>
         <Space direction="vertical">
-          <Button onClick={handleCreateQuestion} type="primary" size="large" icon={<PlusOutlined></PlusOutlined>}>
+          <Button loading={loading} onClick={handleCreateQuestion} type="primary" size="large" icon={<PlusOutlined></PlusOutlined>}>
             创建问卷
           </Button>
           <Divider></Divider>
@@ -59,7 +64,7 @@ export default function ManageLayout() {
           </Button>
         </Space>
       </Col>
-      <Col span={20}>
+      <Col span={20} className={styles.right}>
         <Outlet></Outlet>
       </Col>
     </Row>

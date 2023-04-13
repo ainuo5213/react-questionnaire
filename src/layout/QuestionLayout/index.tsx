@@ -1,4 +1,7 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 export default function QuestionLayout() {
-  return <h3>这是question layout页面</h3>
+  return <div>
+    <Outlet></Outlet>
+  </div>
 }

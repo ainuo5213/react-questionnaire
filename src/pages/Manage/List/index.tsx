@@ -10,6 +10,7 @@ import { routeNameMap } from '@/router'
 import ListSearch from '@/components/ListSearch'
 import { useSearchParams } from 'react-router-dom'
 import LoadFeedback from '@/components/LoadFeedback'
+import LoadScroll from '@/components/LoadScroll'
 
 const { Title } = Typography
 
@@ -23,6 +24,9 @@ const QuestionList = function () {
     result: []
   })
   useEffect(() => {
+    getQuestionList()
+  }, [urlSearchParameter])
+  function getQuestionList() {
     const searchParameter = {
       page: +(urlSearchParameter.get('page') || 1),
       q: urlSearchParameter.get('q') || ''
@@ -30,10 +34,12 @@ const QuestionList = function () {
     runAsync(searchParameter).then(data => {
       setQuestions(data)
     })
-  }, [urlSearchParameter])
+  }
   useTitle(`${_siteTitle} - ${routeNameMap.manageList}`)
   function handleSearch(value: string) {
-    console.log('searching data....', value)
+    if (value === (urlSearchParameter.get('q') || '')) {
+      getQuestionList()
+    }
   }
   return (
     <>
@@ -50,13 +56,12 @@ const QuestionList = function () {
           {questions.total === 0 ? (
             <Empty></Empty>
           ) : (
-            questions.result.map(r => {
-              return <QuestionCard key={r.id} data={r}></QuestionCard>
-            })
+              questions.result.map(r => {
+                return <QuestionCard key={r.id} data={r}></QuestionCard>
+              })
           )}
         </LoadFeedback>
       </div>
-      <div className={styles.footer}>load more</div>
     </>
   )
 }

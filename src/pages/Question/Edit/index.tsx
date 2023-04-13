@@ -1,4 +1,11 @@
 import React from 'react'
+import { useQuestionnaireDetail } from '../hooks/useQuestionnaire'
 export default function Edit() {
-  return <h3>这是编辑问卷页面</h3>
+  const { loading, data } =  useQuestionnaireDetail()
+  return <div>
+    <p>Edit Page</p>
+    {
+      loading ? <p>loading</p> : JSON.stringify(data)
+    }
+  </div>
 }

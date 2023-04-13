@@ -14,7 +14,7 @@ export default [
             "isPublished": "@boolean",
             "isStar": "@boolean",
             "answerCount|1-100": 1,
-            "createTime": Random.datetime('YYYY-MM-DD HH:mm:ss')
+            "createTime": Random.datetime('yyyy-MM-dd HH:mm:ss')
           }
         ]
       })
@@ -29,6 +29,16 @@ export default [
     method: 'post',
     response() {
       return new Reponse(Random.guid())
+    }
+  },
+  {
+    url: '/api/questionnaire/:id',
+    method: 'get',
+    response() {
+      return new Reponse(Mock.mock({
+        "id": "@guid",
+        "title": "@ctitle(4,7)",
+      }))
     }
   }
 ]

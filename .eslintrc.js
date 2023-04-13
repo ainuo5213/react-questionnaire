@@ -19,5 +19,5 @@ module.exports = {
   rules: {
     'react/jsx-no-target-blank': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off'
-  }
+  },
 }

@@ -1,6 +1,6 @@
 import { PaginationWrapper } from '@/types/index'
 import request from '@/utils/request'
-import { QuestionnaireListItem, QuestionnaireListSearchParameter } from './questionnaire.types'
+import { QuestionnaireDetail, QuestionnaireListItem, QuestionnaireListSearchParameter } from './questionnaire.types'
 export function getQuestionires(params: QuestionnaireListSearchParameter) {
   return request<PaginationWrapper<QuestionnaireListItem>>({
     method: 'get',
@@ -11,7 +11,14 @@ export function getQuestionires(params: QuestionnaireListSearchParameter) {
 
 export function createQuestionire() {
   return request<string>({
-    method: 'get',
+    method: 'post',
     url: '/api/questionnaire'
+  })
+}
+
+export function getQuestionireDetail(id: string) {
+  return request<QuestionnaireDetail>({
+    method: 'get',
+    url: `/api/questionnaire/${id}`
   })
 }
