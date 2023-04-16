@@ -15,9 +15,9 @@ export default defineConfig(({ mode }: ConfigEnv) => {
   const isMock = useMock ? useMock!.toLocaleLowerCase()=== 'true' : false
   const isDevelopment = mode === 'development'
   
-  if (isDevelopment && isMock) {
-    exec('yarn mock')
-  }
+  // if (isDevelopment && isMock) {
+  //   exec('yarn mock')
+  // }
   
   return {
     plugins: [react()],

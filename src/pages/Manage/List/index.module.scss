@@ -1,0 +1,15 @@
+.footer {
+  box-sizing: border-box;
+  padding: 10px;
+  .loading {
+    text-align: center;
+  }
+
+  .loading-spin {
+    display: flex;
+    justify-content: center;
+    :global(.ant-spin-text) {
+      margin-left: 5px !important;
+    }
+  }
+}

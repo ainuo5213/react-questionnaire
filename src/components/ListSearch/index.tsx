@@ -13,6 +13,7 @@ export default function ListSearch(prop: ListSearchProp) {
   const [value, setValue] = useState<string>(searchParameter.get(SearchKey) || '')
   function handleSearch(value: string) {
     searchParameter.set(SearchKey, value)
+    searchParameter.set('_t', String(Date.now()))
     setSearchParameter(searchParameter)
     typeof prop.onSearch === 'function' && prop.onSearch(value)
   }

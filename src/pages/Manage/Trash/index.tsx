@@ -1,6 +1,5 @@
-import { useRequest, useTitle } from 'ahooks'
-import React, { useEffect, useState } from 'react'
-import { getQuestionires } from '@/api/questionnaire/questionnaire'
+import React, { useState } from 'react'
+import { useTitle } from 'ahooks'
 import styles from '@/pages/Manage/styles/common.module.scss'
 import trashStyles from './index.module.scss'
 import { PaginationWrapper } from '@/types'
@@ -9,6 +8,10 @@ import { Typography, Table, Tag, Space, Button, Modal } from 'antd'
 import { routeNameMap } from '@/router'
 import { ColumnsType } from 'antd/es/table'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { useQuestionList } from '../hooks/useQuestionnaire'
+import ListSearch from '@/components/ListSearch'
+import { useSearchParams } from 'react-router-dom'
+import { SearchPageNum, SearchPageSize } from '@/constants'
 
 type TableListProp = {
   questions: PaginationWrapper<QuestionnaireListItem>
@@ -18,6 +21,7 @@ const { Title } = Typography
 const { confirm } = Modal
 
 function TableList({ questions, loading }: TableListProp) {
+  const [urlSearchParameter, setSearchParameter] = useSearchParams()
   const columns: ColumnsType<QuestionnaireListItem> = [
     {
       key: 'title',
@@ -57,7 +61,6 @@ function TableList({ questions, loading }: TableListProp) {
     selectedRows: QuestionnaireListItem[]
   ) {
     setSelectedRows(selectedRows)
-    console.log(selectedRows)
   }
 
   function handleBatchDelete() {
@@ -69,6 +72,18 @@ function TableList({ questions, loading }: TableListProp) {
         console.log('已删除')
       }
     })
+  }
+
+  function handlePageChange(page: number, pageSize: number) {
+    const oldPageSize = Number(urlSearchParameter.get(SearchPageSize))
+    urlSearchParameter.set(SearchPageSize, String(pageSize || 10))
+    if (pageSize !== oldPageSize) {
+      urlSearchParameter.set(SearchPageNum, String(1))
+    } else {
+      urlSearchParameter.set(SearchPageNum, String(page))
+    }
+    
+    setSearchParameter(urlSearchParameter)
   }
 
   return (
@@ -93,7 +108,10 @@ function TableList({ questions, loading }: TableListProp) {
           total: questions.total,
           showTotal: (total: number) => `共 ${total} 页`,
           defaultPageSize: 10,
-          defaultCurrent: 1
+          defaultCurrent: 1,
+          pageSize: Number(urlSearchParameter.get(SearchPageSize) || 10),
+          current: Number(urlSearchParameter.get(SearchPageNum) || 1),
+          onChange: handlePageChange,
         }}
         columns={columns}
         dataSource={questions.result}
@@ -104,19 +122,10 @@ function TableList({ questions, loading }: TableListProp) {
 }
 
 const QuestionList = function () {
-  const { loading, runAsync } = useRequest(getQuestionires, {
-    manual: true
+  const { loading, data: questions } = useQuestionList({
+    isDeleted: true
   })
 
-  const [questions, setQuestions] = useState<PaginationWrapper<QuestionnaireListItem>>({
-    total: 0,
-    result: []
-  })
-  useEffect(() => {
-    runAsync().then(data => {
-      setQuestions(data)
-    })
-  }, [])
   useTitle(`${_siteTitle} - ${routeNameMap.manageTrash}`)
 
   return (
@@ -125,7 +134,9 @@ const QuestionList = function () {
         <div className={styles.left}>
           <Title level={3}>{routeNameMap.manageTrash}</Title>
         </div>
-        <div className={styles.right}>(搜索)</div>
+        <div className={styles.right}>
+        <ListSearch></ListSearch>
+        </div>
       </div>
       <div className={styles.content}>
         <TableList questions={questions} loading={loading}></TableList>

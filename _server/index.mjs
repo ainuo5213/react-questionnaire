@@ -16,7 +16,7 @@ function awaitResult(fn) {
 
 MockRoutes.forEach(r => {
   router[r.method](r.url, async ctx => {
-    const res = await awaitResult(r.response)
+    const res = await awaitResult(r.response.bind(null, ctx))
     ctx.body = res
   })
 })

@@ -5,11 +5,15 @@ export type QuestionnaireListItem = {
   isStar: boolean
   answerCount: number
   createTime: string
+  isDeleted: boolean
 }
 
 export type QuestionnaireListSearchParameter = {
-  page: number
-  q: string
+  pageNum: number
+  keyWord: string
+  isStar: boolean
+  isDeleted: boolean
+  pageSize: number
 }
 
 export type QuestionnaireDetail = {
