@@ -37,7 +37,6 @@ const QuestionList = function () {
           })
         )}
       </div>
-      <div className={styles.footer}>pagination</div>
     </div>
   )
 }

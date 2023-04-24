@@ -4,14 +4,14 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-design/icons'
 import styles from './index.module.scss'
 import { routePathMap } from '@/router'
-import { createQuestionire } from '@/api/questionnaire/questionnaire'
+import { createQuestionaire } from '@/api/questionnaire/questionnaire'
 import { useRequest } from 'ahooks'
 import { join } from 'path-browserify'
 
 export default function ManageLayout() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { loading, runAsync } = useRequest(createQuestionire, {
+  const { loading, runAsync } = useRequest(createQuestionaire, {
     manual: true
   })
   const useType = useCallback(

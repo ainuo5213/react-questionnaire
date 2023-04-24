@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useTitle } from 'ahooks'
+import { useRequest, useTitle } from 'ahooks'
 import styles from '@/pages/Manage/styles/common.module.scss'
 import trashStyles from './index.module.scss'
 import { PaginationWrapper } from '@/types'
 import { QuestionnaireListItem } from '@/api/questionnaire/questionnaire.types'
-import { Typography, Table, Tag, Space, Button, Modal } from 'antd'
+import { Typography, Table, Tag, Space, Button, Modal, message } from 'antd'
 import { routeNameMap } from '@/router'
 import { ColumnsType } from 'antd/es/table'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
@@ -12,15 +12,17 @@ import { useQuestionList } from '../hooks/useQuestionnaire'
 import ListSearch from '@/components/ListSearch'
 import { useSearchParams } from 'react-router-dom'
 import { SearchPageNum, SearchPageSize } from '@/constants'
+import { updateQuestionaire } from '@/api/questionnaire/questionnaire'
 
 type TableListProp = {
   questions: PaginationWrapper<QuestionnaireListItem>
   loading: boolean
+  refresh: (page?: number) => void
 }
 const { Title } = Typography
 const { confirm } = Modal
 
-function TableList({ questions, loading }: TableListProp) {
+function TableList({ questions, loading, refresh }: TableListProp) {
   const [urlSearchParameter, setSearchParameter] = useSearchParams()
   const columns: ColumnsType<QuestionnaireListItem> = [
     {
@@ -63,13 +65,31 @@ function TableList({ questions, loading }: TableListProp) {
     setSelectedRows(selectedRows)
   }
 
+  const { refreshAsync: batchRecoverQuestionaire, loading: batchRecoveringQuestionaire } = useRequest(async () => {
+    for await (const selectedRow of selectedRows) {
+      updateQuestionaire(selectedRow.id, {
+        isDeleted: true
+      })
+    }
+  }, {
+    manual: true,
+    onSuccess() {
+      message.success('恢复问卷成功')
+      if (questions.result.length === selectedRows.length) {
+        refresh(-1)
+      } else {
+        refresh()
+      }
+    }
+  })
+
   function handleBatchDelete() {
     confirm({
       title: '提示',
       content: '删除之后不可找回，确认是否彻底删除问卷？',
       icon: <ExclamationCircleOutlined></ExclamationCircleOutlined>,
       onOk() {
-        console.log('已删除')
+        batchRecoverQuestionaire()
       }
     })
   }
@@ -86,11 +106,13 @@ function TableList({ questions, loading }: TableListProp) {
     setSearchParameter(urlSearchParameter)
   }
 
+
+
   return (
     <>
       <div className={trashStyles['table-header']}>
         <Space>
-          <Button type="primary" disabled={selectedRows.length === 0}>
+          <Button type="primary" disabled={selectedRows.length === 0} loading={batchRecoveringQuestionaire} onClick={handleBatchDelete}>
             恢复
           </Button>
           <Button onClick={handleBatchDelete} danger disabled={selectedRows.length === 0}>
@@ -122,7 +144,7 @@ function TableList({ questions, loading }: TableListProp) {
 }
 
 const QuestionList = function () {
-  const { loading, data: questions } = useQuestionList({
+  const { loading, data: questions, refresh: reloadTableData } = useQuestionList({
     isDeleted: true
   })
 
@@ -139,7 +161,7 @@ const QuestionList = function () {
         </div>
       </div>
       <div className={styles.content}>
-        <TableList questions={questions} loading={loading}></TableList>
+        <TableList questions={questions} loading={loading} refresh={reloadTableData}></TableList>
       </div>
     </>
   )

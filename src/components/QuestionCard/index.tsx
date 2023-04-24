@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, Divider, Space, Tag, Popconfirm, notification, Modal } from 'antd'
+import React, { useState } from 'react'
+import { Button, Divider, Space, Tag, Popconfirm, notification, Modal, message } from 'antd'
 import { QuestionnaireListItem } from '@/api/questionnaire/questionnaire.types'
 import styles from './index.module.scss'
 import {
@@ -15,6 +15,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { routePathMap } from '@/router'
 import { join } from 'path-browserify'
 import classNames from 'classnames'
+import { useRequest } from 'ahooks'
+import { copyQuestionaire, updateQuestionaire } from '@/api/questionnaire/questionnaire'
 type questionnaireCardProp = {
   data: QuestionnaireListItem
 }
@@ -22,12 +24,44 @@ type questionnaireCardProp = {
 const { confirm } = Modal
 const questionnaireCard = function ({ data }: questionnaireCardProp) {
   const navigate = useNavigate()
-  const [api, contextHolder] = notification.useNotification()
+  const [isStarState, setIsStarState] = useState(data.isStar)
+  const { runAsync: updateQuestionaireAsync, loading: updatingQuestionaire } = useRequest(updateQuestionaire, {
+    manual: true,
+    onSuccess() {
+      setIsStarState(!isStarState)
+      message.success({
+        content: `${!isStarState ? '收藏' : '取消收藏'}问卷成功`
+      })
+    }
+  })
+  const { runAsync: copyQuestionaireAsync, loading: copyingQuestionaire } = useRequest(copyQuestionaire, {
+    manual: true,
+    onSuccess(id) {
+      message.success({
+        content: '复制问卷成功'
+      })
+      navigate({
+        pathname: join(routePathMap.questionnaireEdit, id)
+      })
+    }
+  })
+  const [isDeletedState, setIsDeletedState] = useState(false)
+  const { runAsync: deleteQuestionaireAsync, loading: deletingQuestionaire } = useRequest(updateQuestionaire, {
+    manual: true,
+    onSuccess() {
+      setIsDeletedState(true)
+      message.success({
+        content: '删除问卷成功'
+      })
+    }
+  })
   function onCopyConfirm() {
-    api.success({
-      message: '复制问卷',
-      description: '复制该问卷成功',
-      duration: 2
+    copyQuestionaireAsync(data.id)
+    
+  }
+  function handleUpdateStart() {
+    updateQuestionaireAsync(data.id, {
+      isStar: !isStarState
     })
   }
   function handleDelete() {
@@ -37,9 +71,14 @@ const questionnaireCard = function ({ data }: questionnaireCardProp) {
       content: '确定删除该问卷吗？',
       icon: <ExclamationCircleOutlined></ExclamationCircleOutlined>,
       onOk() {
-        console.log('删除')
+        deleteQuestionaireAsync(data.id, {
+          isDeleted: true
+        })
       }
     })
+  }
+  if (isDeletedState) {
+    return null
   }
   return (
     <div className={styles.container}>
@@ -53,7 +92,7 @@ const questionnaireCard = function ({ data }: questionnaireCardProp) {
             }
           >
             <Space>
-              {data.isStar ? <StarOutlined className={styles.stared}></StarOutlined> : null}
+              {isStarState ? <StarOutlined className={styles.stared}></StarOutlined> : null}
               {data.title}
             </Space>
           </Link>
@@ -95,10 +134,12 @@ const questionnaireCard = function ({ data }: questionnaireCardProp) {
             <Button
               type="text"
               className={classNames({
-                [styles.stared]: data.isStar
+                [styles.stared]: isStarState
               })}
-              icon={data.isStar ? <StarFilled></StarFilled> : <StarOutlined></StarOutlined>}
+              icon={isStarState ? <StarFilled></StarFilled> : <StarOutlined></StarOutlined>}
               size="small"
+              onClick={handleUpdateStart}
+              loading={updatingQuestionaire}
             ></Button>
             <Popconfirm
               title="提示"
@@ -112,6 +153,7 @@ const questionnaireCard = function ({ data }: questionnaireCardProp) {
                 icon={<CopyOutlined></CopyOutlined>}
                 size="small"
                 title="复制"
+                loading={copyingQuestionaire}
               ></Button>
             </Popconfirm>
 
@@ -121,11 +163,11 @@ const questionnaireCard = function ({ data }: questionnaireCardProp) {
               size="small"
               title="删除"
               onClick={handleDelete}
+              loading={deletingQuestionaire}
             ></Button>
           </Space>
         </div>
       </div>
-      {contextHolder}
     </div>
   )
 }

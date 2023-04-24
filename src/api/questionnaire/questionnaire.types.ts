@@ -23,4 +23,5 @@ export type QuestionnaireDetail = {
   isStar: boolean
   answerCount: number
   createTime: string
+  isDeleted: boolean
 }

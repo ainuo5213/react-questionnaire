@@ -108,9 +108,13 @@ function getPathnames(pathes: RoutePathType[], rootPath = '') {
     return res
   }, {})
 
-  return currentPathObject
+  return currentPathObject as RoutePath<string>
 }
 
+type PathNames = 'home' | 'register' | 'login' | 'questionnaireEdit' | 'questionnaireStat' | 'manageStar' | 'manageTrash' | 'manageList'
+type RoutePath<T> = {
+  [K in PathNames]: T
+}
 function getPathTitles(pathes: RoutePathType[]) {
   const currentPathObject = pathes.reduce((res: Record<string, string>, cur: RoutePathType) => {
     if (cur.children) {
@@ -122,7 +126,7 @@ function getPathTitles(pathes: RoutePathType[]) {
     return res
   }, {})
 
-  return currentPathObject
+  return currentPathObject as RoutePath<string>
 }
 
 export const routePathMap = getPathnames(pathes)

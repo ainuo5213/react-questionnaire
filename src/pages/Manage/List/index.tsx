@@ -3,12 +3,12 @@ import { useRequest, useTitle, useDebounceFn } from 'ahooks'
 import styles from '@/pages/Manage/styles/common.module.scss'
 import listStyles from './index.module.scss'
 import QuestionCard from '@/components/QuestionCard'
-import { Empty, Spin, Typography } from 'antd'
+import { Spin, Typography } from 'antd'
 import { routeNameMap } from '@/router'
 import ListSearch from '@/components/ListSearch'
 import { QuestionnaireListItem } from '@/api/questionnaire/questionnaire.types'
 import { useSearchParams } from 'react-router-dom'
-import { getQuestionires } from '@/api/questionnaire/questionnaire'
+import { getQuestionaires } from '@/api/questionnaire/questionnaire'
 import { SearchKey } from '@/constants'
 
 const { Title } = Typography
@@ -22,7 +22,7 @@ const QuestionList = function () {
   const footerRef = useRef<HTMLDivElement | null>(null)
   const keyWord = urlSearchParameter.get(SearchKey) || ''
   useTitle(`${_siteTitle} - ${routeNameMap.manageList}`)
-  const { runAsync, loading } = useRequest(getQuestionires, {
+  const { runAsync, loading } = useRequest(getQuestionaires, {
     manual: true,
   })
   const { run } = useDebounceFn(tryLoadMore, {

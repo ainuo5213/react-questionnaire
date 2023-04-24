@@ -2,10 +2,6 @@ import Mock from 'mockjs'
 import Reponse from '../model/Response.js'
 const { Random } = Mock
 function getQuestionList({ pageSize, isDeleted, isStar }) {
-  console.log(pageSize);
-  console.log(Array.from({ length: pageSize }, (_, i) => {
-    return 1
-  }));
   return Array.from({ length: pageSize }, (_, i) => {
     return {
         id: Random.guid(),
@@ -48,6 +44,20 @@ export default [
         "id": "@guid",
         "title": "@ctitle(4,7)",
       }))
+    }
+  },
+  {
+    url: '/api/questionnaire/:id',
+    method: 'patch',
+    response() {
+      return new Reponse(null)
+    }
+  },
+  {
+    url: '/api/questionnaire/duplicate/:id',
+    method: 'patch',
+    response() {
+      return new Reponse(Random.guid())
     }
   }
 ]
