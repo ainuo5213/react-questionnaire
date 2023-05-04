@@ -59,5 +59,12 @@ export default [
     response() {
       return new Reponse(Random.guid())
     }
+  },
+  {
+    url: '/api/questionnaire',
+    method: 'delete',
+    response() {
+      return new Reponse(null)
+    }
   }
 ]

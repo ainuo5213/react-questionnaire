@@ -37,3 +37,13 @@ export function copyQuestionaire(id: string) {
     url: `/api/questionnaire/duplicate/${id}`
   })
 }
+
+export function batchDeleteQuestionaires(idList: string[]) {
+  return request<null>({
+    method: 'delete',
+    url: `/api/questionnaire`,
+    data: {
+      ids: idList
+    }
+  })
+}

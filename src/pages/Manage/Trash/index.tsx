@@ -12,7 +12,7 @@ import { useQuestionList } from '../hooks/useQuestionnaire'
 import ListSearch from '@/components/ListSearch'
 import { useSearchParams } from 'react-router-dom'
 import { SearchPageNum, SearchPageSize } from '@/constants'
-import { updateQuestionaire } from '@/api/questionnaire/questionnaire'
+import { batchDeleteQuestionaires, updateQuestionaire } from '@/api/questionnaire/questionnaire'
 
 type TableListProp = {
   questions: PaginationWrapper<QuestionnaireListItem>
@@ -65,7 +65,7 @@ function TableList({ questions, loading, refresh }: TableListProp) {
     setSelectedRows(selectedRows)
   }
 
-  const { refreshAsync: batchRecoverQuestionaire, loading: batchRecoveringQuestionaire } = useRequest(async () => {
+  const { runAsync: batchRecoverQuestionaire, loading: batchRecoveringQuestionaire } = useRequest(async () => {
     for await (const selectedRow of selectedRows) {
       updateQuestionaire(selectedRow.id, {
         isDeleted: true
@@ -75,21 +75,45 @@ function TableList({ questions, loading, refresh }: TableListProp) {
     manual: true,
     onSuccess() {
       message.success('恢复问卷成功')
-      if (questions.result.length === selectedRows.length) {
-        refresh(-1)
-      } else {
-        refresh()
-      }
+      refreshTableData()
     }
   })
+
+  const { runAsync: batchDeleteQuestionaire, loading: batchDeleting } = useRequest(batchDeleteQuestionaires, {
+    manual: true,
+    onSuccess() {
+      message.success('批量删除问卷成功')
+      refreshTableData()
+    }
+  })
+
+  function refreshTableData() {
+    if (questions.result.length === selectedRows.length) {
+      refresh(-1)
+    } else {
+      refresh()
+    }
+    setSelectedRows([])
+  }
+
+  function handleRecover() {
+    confirm({
+      title: '提示',
+      content: '确认要恢复所选中的问卷吗？',
+      icon: <ExclamationCircleOutlined></ExclamationCircleOutlined>,
+      onOk() {
+        batchRecoverQuestionaire()
+      }
+    })
+  }
 
   function handleBatchDelete() {
     confirm({
       title: '提示',
-      content: '删除之后不可找回，确认是否彻底删除问卷？',
+      content: '彻底删除的问卷不可恢复，确认删除选中的问卷吗？',
       icon: <ExclamationCircleOutlined></ExclamationCircleOutlined>,
       onOk() {
-        batchRecoverQuestionaire()
+        batchDeleteQuestionaire(selectedRows.map(r => r.id))
       }
     })
   }
@@ -112,10 +136,10 @@ function TableList({ questions, loading, refresh }: TableListProp) {
     <>
       <div className={trashStyles['table-header']}>
         <Space>
-          <Button type="primary" disabled={selectedRows.length === 0} loading={batchRecoveringQuestionaire} onClick={handleBatchDelete}>
+          <Button type="primary" disabled={selectedRows.length === 0} loading={batchRecoveringQuestionaire} onClick={handleRecover}>
             恢复
           </Button>
-          <Button onClick={handleBatchDelete} danger disabled={selectedRows.length === 0}>
+          <Button loading={batchDeleting} onClick={handleBatchDelete} danger disabled={selectedRows.length === 0}>
             彻底删除
           </Button>
         </Space>
