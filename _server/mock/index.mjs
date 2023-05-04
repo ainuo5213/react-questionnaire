@@ -1,3 +1,4 @@
 import test from './test.mjs'
 import questionnaire from './questionnaire.mjs'
-export default [...test, ...questionnaire]
+import user from './user.mjs'
+export default [...test, ...questionnaire, ...user]

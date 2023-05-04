@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   // 是否适用分号
   semi: false,
 
@@ -9,19 +9,19 @@ module.exports = {
   tabWidth: 2,
 
   // 多行对象/数组，在尾部增加逗号
-  trailingComma: 'none',
+  trailingComma: "none",
 
   // 解析器
-  parser: 'typescript',
+  parser: "typescript",
 
   // 行宽
   printWidth: 100,
 
-  endOfLine: 'auto',
+  endOfLine: "auto",
 
   // 箭头函数：一个参数的时候省略括号
-  arrowParens: 'avoid',
+  arrowParens: "avoid",
 
   // 括号内不出现空格
-  bracketSpacing: true
-}
+  bracketSpacing: true,
+};

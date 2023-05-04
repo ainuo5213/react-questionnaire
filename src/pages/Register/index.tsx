@@ -1,17 +1,35 @@
-import { routeNameMap, routePathMap } from '@/router'
-import React from 'react'
-import { useTitle } from 'ahooks'
-import { Button, Card, Form, Input, Space, Typography } from 'antd'
-import { UserAddOutlined } from '@ant-design/icons'
-import styles from './index.module.scss'
-import { Link } from 'react-router-dom'
-import { RegisterUserForm } from '@/api/system/user.types'
+import { routeNameMap, routePathMap } from "@/router";
+import React from "react";
+import { useRequest, useTitle } from "ahooks";
+import { Button, Card, Form, Input, Space, Typography, message } from "antd";
+import { UserAddOutlined } from "@ant-design/icons";
+import styles from "./index.module.scss";
+import { Link, useNavigate } from "react-router-dom";
+import { RegisterUserForm } from "@/api/system/user.types";
+import { register } from "@/api/user/user";
 
-const { Title } = Typography
+const { Title } = Typography;
 export default function Register() {
-  useTitle(`${_siteTitle} - ${routeNameMap.register}`)
+  useTitle(`${_siteTitle} - ${routeNameMap.register}`);
+  const navigate = useNavigate();
+  const { runAsync: registerUser, loading: registering } = useRequest(
+    register,
+    {
+      manual: true,
+      onSuccess() {
+        message.success("注册用户成功");
+        navigate({
+          pathname: routePathMap.login,
+        });
+      },
+    }
+  );
   function handleFormFinish(value: RegisterUserForm) {
-    console.log(value)
+    registerUser({
+      username: value.username,
+      nickname: value.nickname,
+      password: value.password,
+    });
   }
   return (
     <div className={styles.container}>
@@ -38,18 +56,21 @@ export default function Register() {
               name="username"
               rules={[
                 () => ({
+                  required: true,
                   validator(_, value: string) {
                     if (!value) {
-                      return Promise.reject(new Error('请输入用户名'))
+                      return Promise.reject(new Error("请输入用户名"));
                     } else if (value.length < 4 || value.length > 20) {
-                      return Promise.reject(new Error('用户名长度在4到20之间'))
+                      return Promise.reject(new Error("用户名长度在4到20之间"));
                     } else if (!/^\w+$/i.test(value)) {
-                      return Promise.reject(new Error('用户名需由字母、数字、下划线组成'))
+                      return Promise.reject(
+                        new Error("用户名需由字母、数字、下划线组成")
+                      );
                     } else {
-                      return Promise.resolve()
+                      return Promise.resolve();
                     }
-                  }
-                })
+                  },
+                }),
               ]}
             >
               <Input></Input>
@@ -57,24 +78,24 @@ export default function Register() {
             <Form.Item
               label="密码"
               name="password"
-              rules={[{ required: true, message: '请输入密码' }]}
+              rules={[{ required: true, message: "请输入密码" }]}
             >
               <Input.Password></Input.Password>
             </Form.Item>
             <Form.Item
               label="确认密码"
               name="confirm"
-              dependencies={['password']}
+              dependencies={["password"]}
               rules={[
-                { required: true, message: '请输入确认密码' },
+                { required: true, message: "请输入确认密码" },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve()
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
                     }
-                    return Promise.reject(new Error('密码和确认密码不同'))
-                  }
-                })
+                    return Promise.reject(new Error("密码和确认密码不同"));
+                  },
+                }),
               ]}
             >
               <Input.Password></Input.Password>
@@ -83,20 +104,27 @@ export default function Register() {
               label="昵称"
               name="nickname"
               rules={[
-                { required: true, message: '请输入昵称' },
-                { type: 'string', min: 4, max: 20, message: '昵称长度在4到20之间' },
-                { pattern: /^\w+$/i, message: '昵称需为字母、数字、下划线组成' }
+                {
+                  type: "string",
+                  min: 4,
+                  max: 20,
+                  message: "昵称长度在4到20之间",
+                },
+                {
+                  pattern: /^\w+$/i,
+                  message: "昵称需为字母、数字、下划线组成",
+                },
               ]}
             >
               <Input.Password></Input.Password>
             </Form.Item>
             <Form.Item
               wrapperCol={{
-                offset: 6
+                offset: 6,
               }}
             >
               <Space>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={registering}>
                   注册
                 </Button>
                 <span>
@@ -108,5 +136,5 @@ export default function Register() {
         </div>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,12 +1,13 @@
-import CopyRight from '@/components/CopyRight'
-import Logo from '@/components/Logo'
-import Profile from '@/components/Profile'
-import { Layout } from 'antd'
-import React, { useMemo } from 'react'
-import { Outlet } from 'react-router-dom'
-import styles from './index.module.scss'
+import CopyRight from "@/components/CopyRight";
+import Logo from "@/components/Logo";
+import Profile from "@/components/Profile";
+import { Layout } from "antd";
+import React, { useMemo } from "react";
+import { Outlet } from "react-router-dom";
+import styles from "./index.module.scss";
 export default function MainLayout() {
-  const MemorizedCopyRight = useMemo(() => CopyRight, [])
+  const MemorizedCopyRight = useMemo(() => CopyRight, []);
+
   return (
     <Layout>
       <Layout.Header className={styles.header}>
@@ -24,5 +25,5 @@ export default function MainLayout() {
         <MemorizedCopyRight></MemorizedCopyRight>
       </Layout.Footer>
     </Layout>
-  )
+  );
 }

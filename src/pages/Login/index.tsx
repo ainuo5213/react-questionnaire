@@ -1,23 +1,49 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Card, Checkbox, Form, Input, Space, Typography } from 'antd'
-import styles from './index.module.scss'
-import { UserAddOutlined } from '@ant-design/icons'
-import { routePathMap } from '@/router'
-import { Link } from 'react-router-dom'
-import { LoginUserForm } from '@/api/system/user.types'
-import { RememberMe } from '@/constants'
-import useRemember from './useRemember'
-const { Title } = Typography
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Form,
+  Input,
+  Space,
+  Typography,
+  message,
+} from "antd";
+import styles from "./index.module.scss";
+import { UserAddOutlined } from "@ant-design/icons";
+import { routePathMap } from "@/router";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginUserForm } from "@/api/system/user.types";
+import { RememberMe, TokenKey } from "@/constants";
+import useRemember from "./useRemember";
+import { useRequest } from "ahooks";
+import { login } from "@/api/user/user";
+const { Title } = Typography;
 export default function Login() {
-  const [formRef] = Form.useForm()
+  const [formRef] = Form.useForm();
+  const navigate = useNavigate();
+  const { runAsync: userLogin, loading: logining } = useRequest(login, {
+    manual: true,
+    onSuccess(token) {
+      localStorage.setItem(TokenKey, token);
+      message.success("登录成功");
+      navigate({
+        pathname: routePathMap.manageList,
+      });
+    },
+  });
   const { formData, setFormData } = useRemember<LoginUserForm>(RememberMe, {
     onLoaded(value) {
-      formRef.setFieldsValue(value)
-    }
-  })
+      formRef.setFieldsValue(value);
+    },
+  });
 
   function handleFormFinish(form: LoginUserForm) {
-    setFormData(form)
+    setFormData(form);
+    userLogin({
+      username: form.username,
+      password: form.password,
+    });
   }
   return (
     <div className={styles.container}>
@@ -27,7 +53,7 @@ export default function Login() {
             <Title level={2}>
               <UserAddOutlined></UserAddOutlined>
             </Title>
-            <Title level={2}>注册新用户</Title>
+            <Title level={2}>登陆</Title>
           </Space>
         </div>
         <div className={styles.content}>
@@ -44,27 +70,31 @@ export default function Login() {
             <Form.Item
               label="用户名"
               name="username"
-              rules={[{ required: true, message: '请输入用户名' }]}
+              rules={[{ required: true, message: "请输入用户名" }]}
             >
               <Input></Input>
             </Form.Item>
             <Form.Item
               label="密码"
               name="password"
-              rules={[{ required: true, message: '请输入密码' }]}
+              rules={[{ required: true, message: "请输入密码" }]}
             >
               <Input.Password></Input.Password>
             </Form.Item>
-            <Form.Item wrapperCol={{ offset: 6 }} name="remember" valuePropName="checked">
+            <Form.Item
+              wrapperCol={{ offset: 6 }}
+              name="remember"
+              valuePropName="checked"
+            >
               <Checkbox>记住我</Checkbox>
             </Form.Item>
             <Form.Item
               wrapperCol={{
-                offset: 6
+                offset: 6,
               }}
             >
               <Space>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={logining}>
                   注册
                 </Button>
                 <span>
@@ -76,5 +106,5 @@ export default function Login() {
         </div>
       </Card>
     </div>
-  )
+  );
 }
