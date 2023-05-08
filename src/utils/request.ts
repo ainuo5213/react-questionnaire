@@ -44,9 +44,7 @@ instance.interceptors.response.use(
   }
 );
 
-export default async function <T = any>(
-  config: AxiosRequestConfig
-): Promise<T> {
+export default async function <T>(config: AxiosRequestConfig): Promise<T> {
   try {
     const response = await instance(config);
     const data = response as unknown as Response<T>;
