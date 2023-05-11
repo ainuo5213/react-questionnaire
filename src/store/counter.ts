@@ -7,6 +7,7 @@ export interface CounterState {
 const initialState: CounterState = {
   count: 0,
 };
+// reduxjs/toolkit内部使用的immer
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
