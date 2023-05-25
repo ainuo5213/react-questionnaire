@@ -1,13 +1,16 @@
 import CopyRight from "@/components/CopyRight";
 import Logo from "@/components/Logo";
 import Profile from "@/components/Profile";
-import { Layout } from "antd";
+import { Layout, Spin } from "antd";
 import React, { useMemo } from "react";
 import { Outlet } from "react-router-dom";
 import styles from "./index.module.scss";
+import useUserInfo from "@/hooks/useUserInfo";
+import useNavigatePage from "@/hooks/useNavigatePage";
 export default function MainLayout() {
   const MemorizedCopyRight = useMemo(() => CopyRight, []);
-
+  const { loadingUser } = useUserInfo();
+  useNavigatePage(loadingUser);
   return (
     <Layout>
       <Layout.Header className={styles.header}>
@@ -19,7 +22,13 @@ export default function MainLayout() {
         </div>
       </Layout.Header>
       <Layout.Content className={styles.main}>
-        <Outlet></Outlet>
+        {loadingUser ? (
+          <div className={styles.spin}>
+            <Spin></Spin>
+          </div>
+        ) : (
+          <Outlet></Outlet>
+        )}
       </Layout.Content>
       <Layout.Footer className={styles.footer}>
         <MemorizedCopyRight></MemorizedCopyRight>

@@ -1,26 +1,24 @@
-import { getUserInfo } from "@/api/user/user";
-import { TokenKey } from "@/constants";
+import React from "react";
 import { routePathMap } from "@/router";
 import { UserOutlined } from "@ant-design/icons";
-import { useRequest } from "ahooks";
 import { Dropdown, MenuProps, message } from "antd";
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import { UserInfoState, clearUserInfo } from "@/store/reducer/userInfo";
+import { TokenKey } from "@/constants";
 
 export default function Profile() {
-  const { data } = useRequest(getUserInfo, {
-    onSuccess(data) {
-      // TODO: 存储用户信息
-      console.log(data);
-    },
-  });
+  const { userInfo } = useSelector<RootState>((r) => r.user) as UserInfoState;
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   function handleLogout() {
     localStorage.removeItem(TokenKey);
     message.success("退出登录成功");
     navigate({
       pathname: routePathMap.login,
     });
+    dispatch(clearUserInfo());
   }
   const items: MenuProps["items"] = [
     {
@@ -29,12 +27,12 @@ export default function Profile() {
       onClick: handleLogout,
     },
   ];
-  if (data) {
+  if (userInfo) {
     return (
       <Dropdown menu={{ items }} placement="bottomRight" arrow>
-        <span style={{ color: "#e8e8e8" }}>
+        <span style={{ color: "#e8e8e8", cursor: "pointer" }}>
           <UserOutlined></UserOutlined>
-          {data.nickname}
+          {userInfo.nickname}
         </span>
       </Dropdown>
     );
