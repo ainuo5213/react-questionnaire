@@ -15,7 +15,7 @@ const initialState: UserInfoState = {
   userInfo: { ...defaultUserInfo },
 };
 export const userSlice = createSlice({
-  name: "counter",
+  name: "userInfo",
   initialState,
   reducers: {
     setUserInfo(state: UserInfoState, data: PayloadAction<UserInfo>) {

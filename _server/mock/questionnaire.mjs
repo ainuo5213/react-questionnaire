@@ -1,70 +1,99 @@
-import Mock from 'mockjs'
-import Reponse from '../model/Response.js'
-const { Random } = Mock
+import Mock from "mockjs";
+import Reponse from "../model/Response.js";
+const { Random } = Mock;
 function getQuestionList({ pageSize, isDeleted, isStar }) {
   return Array.from({ length: pageSize }, (_, i) => {
     return {
-        id: Random.guid(),
-        title: Random.ctitle(4, 7),
-        isPublished: Random.boolean(),
-        isStar: isStar || Random.boolean(),
-        answerCount: Random.natural(1, 100),
-        createTime: Random.datetime('yyyy-MM-dd HH:mm:ss'),
-        isDeleted: isDeleted || Random.boolean(),
-    }
-  })
+      id: Random.guid(),
+      title: Random.ctitle(4, 7),
+      isPublished: Random.boolean(),
+      isStar: isStar || Random.boolean(),
+      answerCount: Random.natural(1, 100),
+      createTime: Random.datetime("yyyy-MM-dd HH:mm:ss"),
+      isDeleted: isDeleted || Random.boolean(),
+    };
+  });
 }
 export default [
   {
-    url: '/api/questionnaires',
-    method: 'get',
+    url: "/api/questionnaires",
+    method: "get",
     response(ctx) {
-      const isStar = (Boolean(ctx.query.isStar) || false)
-      const isDeleted = (Boolean(ctx.query.isDeleted) || false)
-      const pageSize = (Number(ctx.query.pageSize) || 10)
-      const res = getQuestionList({isDeleted, isStar, pageSize})
+      const isStar = Boolean(ctx.query.isStar) || false;
+      const isDeleted = Boolean(ctx.query.isDeleted) || false;
+      const pageSize = Number(ctx.query.pageSize) || 10;
+      const res = getQuestionList({ isDeleted, isStar, pageSize });
       return new Reponse({
         total: 120,
-        result: res
-      })
-    }
+        result: res,
+      });
+    },
   },
   {
-    url: '/api/questionnaire',
-    method: 'post',
+    url: "/api/questionnaire",
+    method: "post",
     response() {
-      return new Reponse(Random.guid())
-    }
+      return new Reponse(Random.guid());
+    },
   },
   {
-    url: '/api/questionnaire/:id',
-    method: 'get',
+    url: "/api/questionnaire/:id",
+    method: "get",
     response() {
-      return new Reponse(Mock.mock({
-        "id": "@guid",
-        "title": "@ctitle(4,7)",
-      }))
-    }
+      return new Reponse(
+        Mock.mock({
+          id: "@guid",
+          title: "@ctitle(4,7)",
+          componentList: [
+            {
+              fe_id: Random.guid(),
+              type: "questionTitle",
+              props: {
+                text: "个人信息调研",
+                level: 1,
+                isCenter: false,
+              },
+            },
+            {
+              fe_id: Random.guid(),
+              type: "questionInput",
+              props: {
+                title: "输入框",
+                placeholder: "请输入你的姓名",
+              },
+            },
+            {
+              fe_id: Random.guid(),
+              type: "questionInput",
+              props: {
+                title: "输入框2",
+                placeholder: "请输入你的电话",
+              },
+            },
+          ],
+        })
+      );
+    },
   },
   {
-    url: '/api/questionnaire/:id',
-    method: 'patch',
+    url: "/api/questionnaire/:id",
+    method: "patch",
     response() {
-      return new Reponse(null)
-    }
+      return new Reponse(null);
+    },
   },
   {
-    url: '/api/questionnaire/duplicate/:id',
-    method: 'patch',
+    url: "/api/questionnaire/duplicate/:id",
+    method: "patch",
     response() {
-      return new Reponse(Random.guid())
-    }
+      return new Reponse(Random.guid());
+    },
   },
   {
-    url: '/api/questionnaire',
-    method: 'delete',
+    url: "/api/questionnaire",
+    method: "delete",
     response() {
-      return new Reponse(null)
-    }
-  }
-]
+      return new Reponse(null);
+    },
+  },
+];
