@@ -11,7 +11,12 @@ export function useQuestionnaireDetail() {
   return useRequest(getQuestionaireDetail, {
     defaultParams: [id!],
     onSuccess(data) {
-      dispatch(resetComponents({ componentList: data.componentList }));
+      dispatch(
+        resetComponents({
+          componentList: data.componentList,
+          selectedComponentId: data.componentList[0]?.fe_id || "",
+        })
+      );
     },
   });
 }

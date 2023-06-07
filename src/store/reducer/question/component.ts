@@ -10,10 +10,12 @@ export interface ComponentType {
 }
 
 export interface ComponentStateType {
+  selectedComponentId: string;
   componentList: ComponentType[];
 }
 
 const initialState: ComponentStateType = {
+  selectedComponentId: "",
   componentList: [],
 };
 export const componentSlice = createSlice({
@@ -25,10 +27,40 @@ export const componentSlice = createSlice({
       data: PayloadAction<ComponentStateType>
     ) {
       state.componentList = data.payload.componentList;
+      state.selectedComponentId = data.payload.selectedComponentId;
+    },
+    changeSelectedComponentId(
+      state: ComponentStateType,
+      data: PayloadAction<string>
+    ) {
+      state.selectedComponentId = data.payload;
+    },
+    addComponent(
+      state: ComponentStateType,
+      data: PayloadAction<ComponentType>
+    ) {
+      if (state.selectedComponentId) {
+        const selectedComponentIndex = state.componentList.findIndex(
+          (r) => r.fe_id === state.selectedComponentId
+        );
+        if (selectedComponentIndex < 0) {
+          state.componentList.push(data.payload);
+        } else {
+          state.componentList.splice(
+            selectedComponentIndex + 1,
+            0,
+            data.payload
+          );
+        }
+      } else {
+        state.componentList.push(data.payload);
+      }
+      state.selectedComponentId = data.payload.fe_id;
     },
   },
 });
 
-export const { resetComponents } = componentSlice.actions;
+export const { resetComponents, changeSelectedComponentId, addComponent } =
+  componentSlice.actions;
 
 export default componentSlice.reducer;
