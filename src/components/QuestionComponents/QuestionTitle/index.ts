@@ -1,4 +1,5 @@
-import Component from "./component";
+import Component from "./Component";
+import QuestionTitlePropComponent from "./PropComponent";
 
 export * from "./type";
 import { defaultTitleProp } from "./type";
@@ -8,4 +9,5 @@ export default {
   type: "questionTitle",
   Component,
   defaultProps: defaultTitleProp,
+  PropComponent: QuestionTitlePropComponent,
 };

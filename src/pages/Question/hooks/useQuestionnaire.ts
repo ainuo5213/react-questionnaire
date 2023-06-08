@@ -1,8 +1,8 @@
 import { getQuestionaireDetail } from "@/api/questionnaire/questionnaire";
-import { AppDispatch } from "@/store";
+import { AppDispatch, RootState } from "@/store";
 import { resetComponents } from "@/store/reducer/question/component";
 import { useRequest } from "ahooks";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export function useQuestionnaireDetail() {

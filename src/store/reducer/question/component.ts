@@ -1,4 +1,3 @@
-import { UserInfo } from "@/api/user/user.types";
 import { ComponentPropType } from "@/components/QuestionComponents";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
@@ -35,6 +34,17 @@ export const componentSlice = createSlice({
     ) {
       state.selectedComponentId = data.payload;
     },
+    changeComponentInfo(
+      state: ComponentStateType,
+      data: PayloadAction<ComponentPropType>
+    ) {
+      const currentComponent = state.componentList.find(
+        (r) => r.fe_id === state.selectedComponentId
+      );
+      if (currentComponent) {
+        currentComponent.props = data.payload;
+      }
+    },
     addComponent(
       state: ComponentStateType,
       data: PayloadAction<ComponentType>
@@ -60,7 +70,11 @@ export const componentSlice = createSlice({
   },
 });
 
-export const { resetComponents, changeSelectedComponentId, addComponent } =
-  componentSlice.actions;
+export const {
+  resetComponents,
+  changeSelectedComponentId,
+  addComponent,
+  changeComponentInfo,
+} = componentSlice.actions;
 
 export default componentSlice.reducer;

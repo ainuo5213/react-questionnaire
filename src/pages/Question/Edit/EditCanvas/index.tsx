@@ -5,7 +5,7 @@ import {
   changeSelectedComponentId,
 } from "@/store/reducer/question/component";
 import { Spin } from "antd";
-import useComponentList from "../../hooks/useComponentList";
+import useComponentInfo from "../../hooks/useComponentInfo";
 import { getComponentConfigureByComponentType } from "@/components/QuestionComponents";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
@@ -50,7 +50,7 @@ function Component(props: EditCanvasComponentPropType) {
 }
 
 export default function EditCanvas(props: EditCanvasPropType) {
-  const componentList = useComponentList();
+  const { componentList } = useComponentInfo();
 
   if (props.loading) {
     return (

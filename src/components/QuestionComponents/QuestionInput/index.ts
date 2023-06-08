@@ -1,4 +1,5 @@
-import Component from "./component";
+import Component from "./Component";
+import QuestionInputPropComponent from "./PropComponent";
 
 export * from "./type";
 import { defaultInputProp } from "./type";
@@ -8,4 +9,5 @@ export default {
   type: "questionInput",
   Component,
   defaultProps: defaultInputProp,
+  PropComponent: QuestionInputPropComponent,
 };
