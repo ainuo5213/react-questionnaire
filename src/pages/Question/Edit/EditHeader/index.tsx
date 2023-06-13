@@ -4,6 +4,7 @@ import { Button, Space, Typography } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useQuestionnaireDetail } from "../../hooks/useQuestionnaire";
+import ToolBar from "./ToolBar";
 const { Title } = Typography;
 export default function EditHeader() {
   const nav = useNavigate();
@@ -23,7 +24,9 @@ export default function EditHeader() {
             <Title>问卷标题</Title>
           </Space>
         </div>
-        <div className={styles.main}>中</div>
+        <div className={styles.main}>
+          <ToolBar></ToolBar>
+        </div>
         <div className={styles.right}>
           <Space>
             <Button>保存</Button>

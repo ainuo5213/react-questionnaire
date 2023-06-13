@@ -67,6 +67,17 @@ export const componentSlice = createSlice({
       }
       state.selectedComponentId = data.payload.fe_id;
     },
+    deleteSelectedComponent(
+      state: ComponentStateType,
+      data: PayloadAction<string>
+    ) {
+      const selectedComponentIndex = state.componentList.findIndex(
+        (r) => r.fe_id === data.payload
+      );
+      if (selectedComponentIndex > -1) {
+        state.componentList.splice(selectedComponentIndex, 1);
+      }
+    },
   },
 });
 
@@ -75,6 +86,7 @@ export const {
   changeSelectedComponentId,
   addComponent,
   changeComponentInfo,
+  deleteSelectedComponent,
 } = componentSlice.actions;
 
 export default componentSlice.reducer;
