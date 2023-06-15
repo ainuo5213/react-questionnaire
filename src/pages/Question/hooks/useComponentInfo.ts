@@ -13,5 +13,6 @@ export default function useComponentInfo() {
     selectedComponent: component.componentList.find(
       (r) => r.fe_id === component.selectedComponentId
     ),
+    clipboardComponent: component.clipboardComponent,
   };
 }

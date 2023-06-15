@@ -26,6 +26,7 @@ export default function QuestionTitlePropComponent(
 
   return (
     <Form
+      disabled={props.disabled}
       layout="vertical"
       initialValues={{ text, isCenter, level }}
       form={form}

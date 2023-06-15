@@ -48,6 +48,8 @@ export default [
             {
               fe_id: Random.guid(),
               type: "questionTitle",
+              isHidden: false,
+              isLocked: false,
               props: {
                 text: "个人信息调研",
                 level: 1,
@@ -57,6 +59,8 @@ export default [
             {
               fe_id: Random.guid(),
               type: "questionInput",
+              isHidden: false,
+              isLocked: false,
               props: {
                 title: "输入框",
                 placeholder: "请输入你的姓名",
@@ -65,6 +69,8 @@ export default [
             {
               fe_id: Random.guid(),
               type: "questionInput",
+              isHidden: false,
+              isLocked: false,
               props: {
                 title: "输入框2",
                 placeholder: "请输入你的电话",

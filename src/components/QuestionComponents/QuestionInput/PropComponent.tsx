@@ -22,6 +22,7 @@ export default function QuestionInputPropComponent(
 
   return (
     <Form
+      disabled={props.disabled}
       layout="vertical"
       initialValues={{ title, placeholder }}
       form={form}

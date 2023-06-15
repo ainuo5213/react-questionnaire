@@ -38,7 +38,8 @@ function Component(props: EditCanvasComponentPropType) {
     <div
       className={classNames(
         styles["component-wrapper"],
-        selectedId === props.component.fe_id ? styles["selected"] : ""
+        selectedId === props.component.fe_id ? styles["selected"] : "",
+        props.component.isLocked ? styles.locked : ""
       )}
       onClick={setSelectedId}
     >
@@ -61,9 +62,11 @@ export default function EditCanvas(props: EditCanvasPropType) {
   }
   return (
     <div className={styles.canvas}>
-      {componentList.map((r) => (
-        <Component component={r} key={r.fe_id}></Component>
-      ))}
+      {componentList
+        .filter((r) => !r.isHidden)
+        .map((r) => (
+          <Component component={r} key={r.fe_id}></Component>
+        ))}
     </div>
   );
 }

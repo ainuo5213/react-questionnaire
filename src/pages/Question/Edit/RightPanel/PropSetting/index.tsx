@@ -13,7 +13,7 @@ function Empty() {
 }
 
 export default function PropSetting() {
-  const { selectedComponent } = useComponentInfo();
+  const { selectedComponent, selectedComponentId } = useComponentInfo();
   const dispatch = useDispatch<AppDispatch>();
   if (!selectedComponent) {
     return <Empty></Empty>;
@@ -24,12 +24,18 @@ export default function PropSetting() {
     return <Empty></Empty>;
   }
   function handleValueChange(newProps: ComponentPropType) {
-    dispatch(changeComponentInfo(newProps));
+    dispatch(
+      changeComponentInfo({
+        fe_id: selectedComponentId,
+        props: newProps,
+      })
+    );
   }
   return (
     <componentConfig.PropComponent
       {...props}
       onChange={handleValueChange}
+      disabled={selectedComponent.isLocked}
     ></componentConfig.PropComponent>
   );
 }
