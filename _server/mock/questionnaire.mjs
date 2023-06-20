@@ -76,6 +76,26 @@ export default [
                 placeholder: "请输入你的电话",
               },
             },
+            {
+              fe_id: Random.guid(),
+              type: "questionParagraph",
+              isHidden: false,
+              isLocked: false,
+              props: {
+                text: "这是一行段落\ntest",
+                isCenter: true,
+              },
+            },
+            {
+              fe_id: Random.guid(),
+              type: "questionTextArea",
+              isHidden: false,
+              isLocked: false,
+              props: {
+                title: "多行输入",
+                placeholder: "请输入...",
+              },
+            },
           ],
         })
       );

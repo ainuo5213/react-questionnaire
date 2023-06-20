@@ -10,6 +10,7 @@ import { getComponentConfigureByComponentType } from "@/components/QuestionCompo
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import classNames from "classnames";
+import useCanvasKeyPress from "../../hooks/useCanvasKeyPress";
 
 type EditCanvasPropType = {
   loading: boolean;
@@ -52,7 +53,7 @@ function Component(props: EditCanvasComponentPropType) {
 
 export default function EditCanvas(props: EditCanvasPropType) {
   const { componentList } = useComponentInfo();
-
+  useCanvasKeyPress();
   if (props.loading) {
     return (
       <div style={{ textAlign: "center", marginTop: 24 }}>
