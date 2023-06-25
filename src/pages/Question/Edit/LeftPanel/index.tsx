@@ -2,6 +2,7 @@ import React from "react";
 import { AppstoreAddOutlined, BarsOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
 import ComponentLib from "./ComponentLib";
+import Layer from "./Layer";
 
 export default function LeftPanel() {
   const tabsItems = [
@@ -21,7 +22,7 @@ export default function LeftPanel() {
           <BarsOutlined></BarsOutlined>涂层
         </span>
       ),
-      children: <span>涂层</span>,
+      children: <Layer></Layer>,
     },
   ];
 

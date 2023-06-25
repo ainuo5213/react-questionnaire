@@ -1,4 +1,4 @@
-type QuestionRadioPropType = {
+export type QuestionRadioPropType = {
   value: string;
   text: string;
 };

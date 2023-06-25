@@ -10,12 +10,16 @@ import QuestionRadioGroupConfigure, {
 import QuestionParagraphConfigue, {
   QuestionParagraphPropType,
 } from "./QuestionParagraph";
+import QuestionCheckboxGroupConfigure, {
+  QustionCheckboxGroupPropType,
+} from "./QuestionCheckboxGroup";
 
 export type ComponentPropType = QustionInputPropType &
   QuestionTitlePropType &
   QustionTextAreaPropType &
   QustionRadioGroupPropType &
-  QuestionParagraphPropType;
+  QuestionParagraphPropType &
+  QustionCheckboxGroupPropType;
 
 export type ComponentConfigureType = {
   title: string;
@@ -30,6 +34,7 @@ const componentConfigureList = [
   QuestionParagraphConfigue,
   QuestionTextAreaConfigure,
   QuestionRadioGroupConfigure,
+  QuestionCheckboxGroupConfigure,
 ];
 
 export function getComponentConfigureByComponentType(type: string) {
@@ -50,6 +55,6 @@ export const componentConfigureGroup = [
   {
     groupId: "select",
     groupName: "用户选择",
-    components: [QuestionRadioGroupConfigure],
+    components: [QuestionRadioGroupConfigure, QuestionCheckboxGroupConfigure],
   },
 ];

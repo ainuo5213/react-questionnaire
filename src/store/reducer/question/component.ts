@@ -128,6 +128,18 @@ export const componentSlice = createSlice({
       clipboardComponent.fe_id = uuidv4();
       insertComponent(state, clipboardComponent);
     },
+    changeComponentTitle(
+      state: ComponentStateType,
+      data: PayloadAction<{ fe_id: string; title: string }>
+    ) {
+      const selectedComponent = state.componentList.find(
+        (r) => r.fe_id === data.payload.fe_id
+      );
+      if (!selectedComponent) {
+        return;
+      }
+      selectedComponent.title = data.payload.title;
+    },
   },
 });
 
@@ -141,6 +153,7 @@ export const {
   toggleComponentLocked,
   copySelectedComponent,
   pasteClibBoardComponent,
+  changeComponentTitle,
 } = componentSlice.actions;
 
 export default componentSlice.reducer;

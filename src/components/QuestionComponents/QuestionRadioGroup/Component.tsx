@@ -13,7 +13,7 @@ export default function QuestionRadio(
   return (
     <div>
       <Paragraph strong>{title}</Paragraph>
-      <Radio.Group>
+      <Radio.Group value={value}>
         <Space direction={isVertical ? "vertical" : "horizontal"}>
           {options.map((r, i) => {
             if (!r.text) {

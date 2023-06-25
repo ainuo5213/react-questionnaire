@@ -1,25 +1,25 @@
 import React, { useEffect } from "react";
 
-import { QuestionRadioPropType, QustionRadioGroupPropType } from "./type";
+import { QuestionCheckboxPropType, QustionCheckboxGroupPropType } from "./type";
 import { Button, Checkbox, Form, Input, Select, Space } from "antd";
 import { QuestionPropEvent } from "../type";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { v4 } from "uuid";
 
 export default function QuestionRadioPropComponent(
-  props: QustionRadioGroupPropType & QuestionPropEvent
+  props: QustionCheckboxGroupPropType & QuestionPropEvent
 ) {
-  const { title, options = [], isVertical, value } = props;
+  const { title, list = [], isVertical } = props;
 
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldsValue({ title, options, isVertical, value });
+    form.setFieldsValue({ title, list, isVertical });
   }, [props]);
 
   function handleValueChange() {
     const newProps = form.getFieldsValue();
-    newProps.options.forEach((r: QuestionRadioPropType) => {
+    newProps.list.forEach((r: QuestionCheckboxPropType) => {
       if (r.value) {
         return;
       }
@@ -33,7 +33,7 @@ export default function QuestionRadioPropComponent(
     <Form
       disabled={props.disabled}
       layout="vertical"
-      initialValues={{ title, options, isVertical, value }}
+      initialValues={{ title, list, isVertical }}
       form={form}
       onValuesChange={handleValueChange}
     >
@@ -45,13 +45,19 @@ export default function QuestionRadioPropComponent(
         <Input></Input>
       </Form.Item>
       <Form.Item label="选项">
-        <Form.List name="options">
+        <Form.List name="list">
           {(fields, { add, remove }) => {
             return (
               <>
                 {fields.map(({ name, key, ...restFields }, i) => {
                   return (
                     <Space direction="horizontal" align="baseline" key={key}>
+                      <Form.Item
+                        name={[name, "checked"]}
+                        valuePropName="checked"
+                      >
+                        <Checkbox></Checkbox>
+                      </Form.Item>
                       <Form.Item
                         name={[name, "text"]}
                         {...restFields}
@@ -64,7 +70,7 @@ export default function QuestionRadioPropComponent(
                             validator(rule, value, callback) {
                               const { options = [] } = form.getFieldsValue();
                               let num = 0;
-                              options.forEach((r: QuestionRadioPropType) => {
+                              list.forEach((r: QuestionCheckboxPropType) => {
                                 if (r.text === value) {
                                   num++;
                                 }
@@ -82,7 +88,7 @@ export default function QuestionRadioPropComponent(
                       >
                         <Input placeholder="输入选项"></Input>
                       </Form.Item>
-                      {i > 1 ? (
+                      {i > 0 ? (
                         <MinusCircleOutlined
                           onClick={() => remove(name)}
                         ></MinusCircleOutlined>
@@ -97,6 +103,7 @@ export default function QuestionRadioPropComponent(
                       add({
                         value: "",
                         text: "",
+                        checked: false,
                       })
                     }
                     icon={<PlusOutlined></PlusOutlined>}
@@ -109,17 +116,6 @@ export default function QuestionRadioPropComponent(
             );
           }}
         </Form.List>
-      </Form.Item>
-      <Form.Item label="默认选中" name="value">
-        <Select
-          options={options
-            .filter((r) => r.text)
-            .map((r) => ({
-              label: r.text,
-              value: r.value,
-            }))}
-          placeholder="请选择按钮组默认选中"
-        ></Select>
       </Form.Item>
       <Form.Item valuePropName="checked" label="竖向排列" name="isVertical">
         <Checkbox></Checkbox>
