@@ -8,10 +8,10 @@ import {
   changeSelectedComponentId,
   toggleComponentLocked,
 } from "@/store/reducer/question/component";
-import { Button, Input, Space, message } from "antd";
+import { Button, Input, InputRef, Space, message } from "antd";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { EyeInvisibleOutlined, LockOutlined } from "@ant-design/icons";
 
 export default function Layer() {
@@ -27,6 +27,11 @@ export default function Layer() {
     }
     if (r.fe_id === selectedComponentId) {
       setChangingTitleId(r.fe_id);
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      });
       return;
     }
     dispatch(changeSelectedComponentId(r.fe_id));
@@ -64,6 +69,8 @@ export default function Layer() {
     dispatch(toggleComponentLocked(r.fe_id));
   }
 
+  const inputRef = useRef<InputRef | null>(null);
+
   return (
     <>
       {componentList.map((r) => {
@@ -77,6 +84,7 @@ export default function Layer() {
                   onPressEnter={handleInputSave}
                   onBlur={handleInputSave}
                   onChange={(e) => handleTitleChange(r, e)}
+                  ref={inputRef}
                 ></Input>
               ) : (
                 <div
