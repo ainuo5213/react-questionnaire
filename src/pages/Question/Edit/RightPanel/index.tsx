@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FileTextOutlined, SettingOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
 import PropSetting from "./PropSetting";
+import PageSetting from "./PageSetting";
+import useComponentInfo from "../../hooks/useComponentInfo";
+
+enum TabKeys {
+  propSetting = "propSetting",
+  pageSetting = "pageSetting",
+}
 
 export default function RightPanel() {
+  const [activeKey, setActiveKey] = useState(TabKeys.pageSetting);
   const tabsItems = [
     {
-      key: "propSetting",
+      key: TabKeys.propSetting,
       label: (
         <span>
           <FileTextOutlined></FileTextOutlined>属性设置
@@ -15,15 +23,31 @@ export default function RightPanel() {
       children: <PropSetting />,
     },
     {
-      key: "layers",
+      key: TabKeys.pageSetting,
       label: (
         <span>
           <SettingOutlined></SettingOutlined>页面设置
         </span>
       ),
-      children: <span>涂层</span>,
+      children: <PageSetting></PageSetting>,
     },
   ];
 
-  return <Tabs defaultActiveKey="componentLib" items={tabsItems}></Tabs>;
+  const { selectedComponentId } = useComponentInfo();
+
+  useEffect(() => {
+    if (selectedComponentId) {
+      setActiveKey(TabKeys.propSetting);
+    } else {
+      setActiveKey(TabKeys.pageSetting);
+    }
+  }, [selectedComponentId]);
+
+  function onTabChange(activeKey: string) {
+    setActiveKey(activeKey as TabKeys);
+  }
+
+  return (
+    <Tabs activeKey={activeKey} items={tabsItems} onChange={onTabChange}></Tabs>
+  );
 }

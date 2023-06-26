@@ -44,6 +44,9 @@ export default [
         Mock.mock({
           id: "@guid",
           title: "@ctitle(4,7)",
+          desc: "",
+          js: "",
+          css: "",
           componentList: [
             {
               fe_id: Random.guid(),

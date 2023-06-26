@@ -1,8 +1,9 @@
 import { getQuestionaireDetail } from "@/api/questionnaire/questionnaire";
-import { AppDispatch, RootState } from "@/store";
+import { AppDispatch } from "@/store";
 import { resetComponents } from "@/store/reducer/question/component";
+import { changePageInfo } from "@/store/reducer/question/page";
 import { useRequest } from "ahooks";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export function useQuestionnaireDetail() {
@@ -15,6 +16,15 @@ export function useQuestionnaireDetail() {
         resetComponents({
           componentList: data.componentList,
           selectedComponentId: data.componentList[0]?.fe_id || "",
+          clipboardComponent: null,
+        })
+      );
+      dispatch(
+        changePageInfo({
+          title: data.title,
+          desc: data.desc,
+          js: data.js,
+          css: data.css,
         })
       );
     },

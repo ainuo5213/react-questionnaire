@@ -26,5 +26,8 @@ export type QuestionnaireDetail = {
   answerCount: number;
   createTime: string;
   isDeleted: boolean;
+  desc: string;
+  js: string;
+  css: string;
   componentList: ComponentType[];
 };
