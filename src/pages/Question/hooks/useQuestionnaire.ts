@@ -14,7 +14,12 @@ export function useQuestionnaireDetail() {
     onSuccess(data) {
       dispatch(
         resetComponents({
-          componentList: data.componentList,
+          componentList: data.componentList.map((r) => {
+            return {
+              ...r,
+              id: r.fe_id,
+            };
+          }),
           selectedComponentId: data.componentList[0]?.fe_id || "",
           clipboardComponent: null,
         })

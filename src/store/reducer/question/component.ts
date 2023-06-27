@@ -1,10 +1,11 @@
 import { ComponentPropType } from "@/components/QuestionComponents";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { getNextComponentId, insertComponent } from "./utils";
+import { getNextComponentId, insertComponent, swapComponent } from "./utils";
 import { cloneDeep } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 export interface ComponentType {
+  id: string;
   fe_id: string;
   type: string;
   title: string;
@@ -140,6 +141,12 @@ export const componentSlice = createSlice({
       }
       selectedComponent.title = data.payload.title;
     },
+    exchangeComponentPosition(
+      state: ComponentStateType,
+      data: PayloadAction<{ from: string; to: string }>
+    ) {
+      swapComponent(state.componentList, data.payload.from, data.payload.to);
+    },
   },
 });
 
@@ -154,6 +161,7 @@ export const {
   copySelectedComponent,
   pasteClibBoardComponent,
   changeComponentTitle,
+  exchangeComponentPosition,
 } = componentSlice.actions;
 
 export default componentSlice.reducer;

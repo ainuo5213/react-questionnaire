@@ -34,3 +34,18 @@ export function insertComponent(
     state.componentList.push(newComponent);
   }
 }
+
+export function swapComponent(
+  componentList: ComponentType[],
+  from: string,
+  to: string
+) {
+  const fromIndex = componentList.findIndex((r) => r.fe_id === from);
+  const toIndex = componentList.findIndex((r) => r.fe_id === to);
+  if (fromIndex === -1 || toIndex === -1) {
+    return;
+  }
+  let tmp = componentList[toIndex];
+  componentList[toIndex] = componentList[fromIndex];
+  componentList[fromIndex] = tmp;
+}
