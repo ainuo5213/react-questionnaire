@@ -21,6 +21,7 @@ export function useQuestionnaireDetail() {
       );
       dispatch(
         changePageInfo({
+          id: data.id,
           title: data.title,
           desc: data.desc,
           js: data.js,

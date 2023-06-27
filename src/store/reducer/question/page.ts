@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type PageStateType = {
+  id: string;
   title: string;
   desc?: string;
   js?: string;
@@ -8,6 +9,7 @@ export type PageStateType = {
 };
 
 const initialState: PageStateType = {
+  id: "",
   title: "",
   desc: "",
   js: "",
@@ -19,6 +21,7 @@ export const componentSlice = createSlice({
   initialState,
   reducers: {
     changePageInfo(state: PageStateType, data: PayloadAction<PageStateType>) {
+      state.id = data.payload.id;
       state.title = data.payload.title;
       state.desc = data.payload.desc;
       state.js = data.payload.js;
