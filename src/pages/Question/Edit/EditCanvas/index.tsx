@@ -42,6 +42,10 @@ type EditCanvasComponentPropType = {
 function Component(props: EditCanvasComponentPropType) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: props.component.id });
+  if (transform) {
+    transform.scaleX = 1;
+    transform.scaleY = 1;
+  }
 
   const style = {
     transform: CSS.Transform.toString(transform),
