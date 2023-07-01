@@ -3,6 +3,7 @@ import { AppstoreAddOutlined, BarsOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
 import ComponentLib from "./ComponentLib";
 import Layer from "./Layer";
+import styles from "./index.module.scss";
 
 export default function LeftPanel() {
   const tabsItems = [
@@ -26,5 +27,12 @@ export default function LeftPanel() {
     },
   ];
 
-  return <Tabs defaultActiveKey="componentLib" items={tabsItems}></Tabs>;
+  return (
+    <Tabs
+      defaultActiveKey="componentLib"
+      items={tabsItems}
+      animated
+      className={styles["left-panel-tabs"]}
+    ></Tabs>
+  );
 }
