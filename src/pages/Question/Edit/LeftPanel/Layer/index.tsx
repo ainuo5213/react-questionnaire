@@ -6,6 +6,7 @@ import {
   changeComponentTitle,
   changeComponentVisible,
   changeSelectedComponentId,
+  exchangeComponentPosition,
   toggleComponentLocked,
 } from "@/store/reducer/question/component";
 import { Button, Input, InputRef, Space, message } from "antd";
@@ -13,6 +14,10 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
 import { ChangeEvent, useRef, useState } from "react";
 import { EyeInvisibleOutlined, LockOutlined } from "@ant-design/icons";
+import DragSortableContainer, {
+  DragSortableItem,
+} from "@/components/DragSortable";
+import { DragEndEvent } from "@dnd-kit/core";
 
 export default function Layer() {
   const { componentList, selectedComponentId } = useComponentInfo();
@@ -70,59 +75,72 @@ export default function Layer() {
   }
 
   const inputRef = useRef<InputRef | null>(null);
-
+  function handleDragEnd(e: DragEndEvent) {
+    const { active, over } = e;
+    if (!over) return;
+    if (active.id !== over.id) {
+      dispatch(
+        exchangeComponentPosition({
+          from: active.id as string,
+          to: over.id as string,
+        })
+      );
+    }
+  }
   return (
-    <>
+    <DragSortableContainer items={componentList} onDragEnd={handleDragEnd}>
       {componentList.map((r) => {
         const { fe_id, isHidden, isLocked, title } = r;
         return (
-          <div key={fe_id} className={classNames([styles["layer-item"]])}>
-            <div className={styles.left}>
-              {fe_id === changingTitleId ? (
-                <Input
-                  value={r.title}
-                  onPressEnter={handleInputSave}
-                  onBlur={handleInputSave}
-                  onChange={(e) => handleTitleChange(r, e)}
-                  ref={inputRef}
-                ></Input>
-              ) : (
-                <div
-                  onClick={() => handleTitleClick(r)}
-                  className={classNames([
-                    styles.title,
-                    { [styles.selected]: selectedComponentId === fe_id },
-                  ])}
-                >
-                  {title}
-                </div>
-              )}
+          <DragSortableItem id={r.fe_id} key={r.fe_id}>
+            <div key={fe_id} className={classNames([styles["layer-item"]])}>
+              <div className={styles.left}>
+                {fe_id === changingTitleId ? (
+                  <Input
+                    value={r.title}
+                    onPressEnter={handleInputSave}
+                    onBlur={handleInputSave}
+                    onChange={(e) => handleTitleChange(r, e)}
+                    ref={inputRef}
+                  ></Input>
+                ) : (
+                  <div
+                    onClick={() => handleTitleClick(r)}
+                    className={classNames([
+                      styles.title,
+                      { [styles.selected]: selectedComponentId === fe_id },
+                    ])}
+                  >
+                    {title}
+                  </div>
+                )}
+              </div>
+              <div className={styles.right}>
+                <Space>
+                  <Button
+                    onClick={() => handleChangeLock(r)}
+                    icon={<EyeInvisibleOutlined></EyeInvisibleOutlined>}
+                    type={isHidden ? "primary" : "text"}
+                    className={classNames({
+                      [styles.btn]: !isHidden,
+                    })}
+                    shape="circle"
+                  ></Button>
+                  <Button
+                    onClick={() => handleChangeHidden(r)}
+                    icon={<LockOutlined></LockOutlined>}
+                    type={isLocked ? "primary" : "text"}
+                    className={classNames({
+                      [styles.btn]: !isLocked,
+                    })}
+                    shape="circle"
+                  ></Button>
+                </Space>
+              </div>
             </div>
-            <div className={styles.right}>
-              <Space>
-                <Button
-                  onClick={() => handleChangeLock(r)}
-                  icon={<EyeInvisibleOutlined></EyeInvisibleOutlined>}
-                  type={isHidden ? "primary" : "text"}
-                  className={classNames({
-                    [styles.btn]: !isHidden,
-                  })}
-                  shape="circle"
-                ></Button>
-                <Button
-                  onClick={() => handleChangeHidden(r)}
-                  icon={<LockOutlined></LockOutlined>}
-                  type={isLocked ? "primary" : "text"}
-                  className={classNames({
-                    [styles.btn]: !isLocked,
-                  })}
-                  shape="circle"
-                ></Button>
-              </Space>
-            </div>
-          </div>
+          </DragSortableItem>
         );
       })}
-    </>
+    </DragSortableContainer>
   );
 }

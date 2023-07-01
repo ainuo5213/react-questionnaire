@@ -12,24 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import classNames from "classnames";
 import useCanvasKeyPress from "../../hooks/useCanvasKeyPress";
-import { CSS } from "@dnd-kit/utilities";
 
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { DragEndEvent } from "@dnd-kit/core";
+import DragSortableContainer, {
+  DragSortableItem,
+} from "@/components/DragSortable";
 
 type EditCanvasPropType = {
   loading: boolean;
@@ -40,18 +27,6 @@ type EditCanvasComponentPropType = {
 };
 
 function Component(props: EditCanvasComponentPropType) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: props.component.id });
-  if (transform) {
-    transform.scaleX = 1;
-    transform.scaleY = 1;
-  }
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
   const dispatch = useDispatch<AppDispatch>();
   const selectedId = useSelector<RootState>(
     (r) => r.component.selectedComponentId
@@ -74,10 +49,6 @@ function Component(props: EditCanvasComponentPropType) {
         props.component.isLocked ? styles.locked : ""
       )}
       onClick={setSelectedId}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
     >
       <div className={styles.component}>
         <component.Component {...props.component.props}></component.Component>
@@ -90,12 +61,6 @@ export default function EditCanvas(props: EditCanvasPropType) {
   const { componentList } = useComponentInfo();
   const dispatch = useDispatch<AppDispatch>();
   useCanvasKeyPress();
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
   if (props.loading) {
     return (
       <div style={{ textAlign: "center", marginTop: 24 }}>
@@ -117,21 +82,17 @@ export default function EditCanvas(props: EditCanvasPropType) {
     }
   }
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
+    <DragSortableContainer
+      items={notEmptyComponentList}
       onDragEnd={handleDragEnd}
     >
       <div className={styles.canvas}>
-        <SortableContext
-          items={notEmptyComponentList}
-          strategy={verticalListSortingStrategy}
-        >
-          {notEmptyComponentList.map((r) => (
-            <Component component={r} key={r.fe_id}></Component>
-          ))}
-        </SortableContext>
+        {notEmptyComponentList.map((r) => (
+          <DragSortableItem id={r.id} key={r.fe_id}>
+            <Component component={r}></Component>
+          </DragSortableItem>
+        ))}
       </div>
-    </DndContext>
+    </DragSortableContainer>
   );
 }
