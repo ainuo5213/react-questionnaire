@@ -26,7 +26,7 @@ const initialState: ComponentStateType = {
   clipboardComponent: null,
 };
 export const componentSlice = createSlice({
-  name: "components",
+  name: "component",
   initialState,
   reducers: {
     resetComponents(

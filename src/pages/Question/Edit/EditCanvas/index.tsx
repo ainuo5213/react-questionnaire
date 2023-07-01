@@ -29,7 +29,7 @@ type EditCanvasComponentPropType = {
 function Component(props: EditCanvasComponentPropType) {
   const dispatch = useDispatch<AppDispatch>();
   const selectedId = useSelector<RootState>(
-    (r) => r.component.selectedComponentId
+    (r) => r.component.present.selectedComponentId
   ) as string;
   const component = getComponentConfigureByComponentType(props.component.type);
   if (!component) {

@@ -6,6 +6,7 @@ import {
   deleteSelectedComponent,
   toggleComponentLocked,
   pasteClibBoardComponent,
+  exchangeComponentPosition,
 } from "@/store/reducer/question/component";
 import {
   DeleteOutlined,
@@ -13,15 +14,24 @@ import {
   LockOutlined,
   CopyOutlined,
   BlockOutlined,
+  DownOutlined,
+  UpOutlined,
+  RedoOutlined,
+  UndoOutlined,
 } from "@ant-design/icons";
 import { Button, Space, Tooltip } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { ActionCreators } from "redux-undo";
 
 export default function ToolBar() {
   const dispatch = useDispatch<AppDispatch>();
-  const { selectedComponentId, selectedComponent, clipboardComponent } =
-    useComponentInfo();
+  const {
+    selectedComponentId,
+    selectedComponent,
+    clipboardComponent,
+    componentList,
+  } = useComponentInfo();
   function handleDelete() {
     dispatch(deleteSelectedComponent(selectedComponentId));
   }
@@ -41,6 +51,38 @@ export default function ToolBar() {
   }
   function handlePaste() {
     dispatch(pasteClibBoardComponent());
+  }
+  const selectedComponentIndex = componentList.findIndex(
+    (r) => r.fe_id === selectedComponentId
+  );
+
+  const upMoveable = selectedComponentIndex > 0 && selectedComponent;
+
+  const downMoveable =
+    selectedComponentIndex < componentList.length - 1 && selectedComponent;
+  function handleUp() {
+    const upComponentId = componentList[selectedComponentIndex - 1]!.id;
+    dispatch(
+      exchangeComponentPosition({
+        from: upComponentId,
+        to: selectedComponentId,
+      })
+    );
+  }
+  function handleDown() {
+    const downComponentId = componentList[selectedComponentIndex + 1]!.id;
+    dispatch(
+      exchangeComponentPosition({
+        from: downComponentId,
+        to: selectedComponentId,
+      })
+    );
+  }
+  function handleUndo() {
+    dispatch(ActionCreators.undo());
+  }
+  function handleRedo() {
+    dispatch(ActionCreators.redo());
   }
   return (
     <Space>
@@ -79,6 +121,36 @@ export default function ToolBar() {
           onClick={handlePaste}
           shape="circle"
           icon={<BlockOutlined></BlockOutlined>}
+        ></Button>
+      </Tooltip>
+      <Tooltip title="上移">
+        <Button
+          disabled={!upMoveable}
+          onClick={handleUp}
+          shape="circle"
+          icon={<UpOutlined></UpOutlined>}
+        ></Button>
+      </Tooltip>
+      <Tooltip title="下移">
+        <Button
+          disabled={!downMoveable}
+          onClick={handleDown}
+          shape="circle"
+          icon={<DownOutlined></DownOutlined>}
+        ></Button>
+      </Tooltip>
+      <Tooltip title="撤销">
+        <Button
+          onClick={handleUndo}
+          shape="circle"
+          icon={<UndoOutlined></UndoOutlined>}
+        ></Button>
+      </Tooltip>
+      <Tooltip title="重做">
+        <Button
+          onClick={handleRedo}
+          shape="circle"
+          icon={<RedoOutlined></RedoOutlined>}
         ></Button>
       </Tooltip>
     </Space>

@@ -17,7 +17,7 @@ const initialState: PageStateType = {
 };
 
 export const componentSlice = createSlice({
-  name: "components",
+  name: "page",
   initialState,
   reducers: {
     changePageInfo(state: PageStateType, data: PayloadAction<PageStateType>) {

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 export default function useComponentInfo() {
   const component = useSelector<RootState>(
-    (state) => state.component
+    (state) => state.component.present
   ) as ComponentStateType;
 
   return {
