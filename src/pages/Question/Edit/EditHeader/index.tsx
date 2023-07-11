@@ -109,9 +109,11 @@ function PublishButton() {
       manual: true,
       onSuccess() {
         message.success("发布问卷成功");
-        navigate({
-          pathname: join(routePathMap.questionnaireEdit, pageInfo.id),
-        });
+        setTimeout(() => {
+          navigate({
+            pathname: join(routePathMap.questionnaireStat, pageInfo.id),
+          });
+        }, 1000);
       },
     }
   );

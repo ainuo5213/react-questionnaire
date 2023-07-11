@@ -31,6 +31,7 @@ export function useQuestionnaireDetail() {
           desc: data.desc,
           js: data.js,
           css: data.css,
+          isPublished: data.isPublished,
         })
       );
     },

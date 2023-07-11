@@ -6,6 +6,7 @@ export type PageStateType = {
   desc?: string;
   js?: string;
   css?: string;
+  isPublished?: boolean;
 };
 
 const initialState: PageStateType = {
@@ -14,6 +15,7 @@ const initialState: PageStateType = {
   desc: "",
   js: "",
   css: "",
+  isPublished: false,
 };
 
 export const componentSlice = createSlice({
@@ -26,6 +28,7 @@ export const componentSlice = createSlice({
       state.desc = data.payload.desc;
       state.js = data.payload.js;
       state.css = data.payload.css;
+      state.isPublished = data.payload.isPublished;
     },
     changePageTitle(state: PageStateType, data: PayloadAction<string>) {
       state.title = data.payload;

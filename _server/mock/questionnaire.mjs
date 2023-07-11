@@ -47,6 +47,7 @@ export default [
           desc: "",
           js: "",
           css: "",
+          isPublished: true,
           componentList: [
             {
               fe_id: Random.guid(),
