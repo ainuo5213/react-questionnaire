@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuestionnaireDetail } from "../hooks/useQuestionnaire";
 import { Button, Result, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useTitle } from "ahooks";
+import { useRequest, useTitle } from "ahooks";
 import usePageInfo from "../hooks/usePageInfo";
 import styles from "./index.module.scss";
 import { PageStateType } from "@/store/reducer/question/page";
 import StatHeader from "./StatHeader";
+import StatCanvas from "./StatCanvas";
+import StatTable from "./StatTable";
+import useComponentInfo from "../hooks/useComponentInfo";
 function Loading() {
   return (
     <div style={{ textAlign: "center" }}>
@@ -16,6 +19,18 @@ function Loading() {
 }
 
 function Content({ data }: { data: PageStateType }) {
+  const [selectedId, setSelectedId] = useState("");
+  const { componentList } = useComponentInfo();
+  const [selectedComponentType, setSelectedComponentType] = useState("");
+  useEffect(() => {
+    if (selectedId) {
+      setSelectedComponentType(
+        componentList.find((r) => r.fe_id === selectedId)!.type
+      );
+    } else {
+      setSelectedComponentType("");
+    }
+  }, [selectedId]);
   const navigate = useNavigate();
   if (!data?.isPublished) {
     return (
@@ -35,8 +50,20 @@ function Content({ data }: { data: PageStateType }) {
   }
   return (
     <>
-      <div className={styles.left}>left</div>
-      <div className={styles.main}>main</div>
+      <div className={styles.left}>
+        <StatCanvas
+          selectedId={selectedId}
+          selectedType={selectedComponentType}
+          onSelect={setSelectedId}
+        ></StatCanvas>
+      </div>
+      <div className={styles.main}>
+        <StatTable
+          selectedId={selectedId}
+          selectedType={selectedComponentType}
+          onSelect={setSelectedId}
+        ></StatTable>
+      </div>
       <div className={styles.right}>right</div>
     </>
   );

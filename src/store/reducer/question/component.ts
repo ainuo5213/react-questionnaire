@@ -12,6 +12,8 @@ export interface ComponentType {
   isHidden: boolean;
   props: ComponentPropType;
   isLocked: boolean;
+  isFormItem: boolean;
+  isStatistic: boolean;
 }
 
 export interface ComponentStateType {

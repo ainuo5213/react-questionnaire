@@ -1,5 +1,6 @@
 import Mock from "mockjs";
 import Reponse from "../model/Response.js";
+import componentList from "./componentList.mjs";
 const { Random } = Mock;
 function getQuestionList({ pageSize, isDeleted, isStar }) {
   return Array.from({ length: pageSize }, (_, i) => {
@@ -48,64 +49,7 @@ export default [
           js: "",
           css: "",
           isPublished: true,
-          componentList: [
-            {
-              fe_id: Random.guid(),
-              type: "questionTitle",
-              isHidden: false,
-              isLocked: false,
-              title: "个人信息调研",
-              props: {
-                text: "个人信息调研",
-                level: 1,
-                isCenter: false,
-              },
-            },
-            {
-              fe_id: Random.guid(),
-              type: "questionInput",
-              isHidden: false,
-              isLocked: false,
-              title: "输入框",
-              props: {
-                title: "输入框",
-                placeholder: "请输入你的姓名",
-              },
-            },
-            {
-              fe_id: Random.guid(),
-              type: "questionInput",
-              isHidden: false,
-              isLocked: false,
-              title: "输入框2",
-              props: {
-                title: "输入框2",
-                placeholder: "请输入你的电话",
-              },
-            },
-            {
-              fe_id: Random.guid(),
-              type: "questionParagraph",
-              isHidden: false,
-              isLocked: false,
-              title: "这是一行段落",
-              props: {
-                text: "这是一行段落\ntest",
-                isCenter: true,
-              },
-            },
-            {
-              fe_id: Random.guid(),
-              type: "questionTextArea",
-              isHidden: false,
-              isLocked: false,
-              title: "多行输入",
-              props: {
-                title: "多行输入",
-                placeholder: "请输入...",
-              },
-            },
-          ],
+          componentList,
         })
       );
     },
