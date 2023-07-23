@@ -12,3 +12,13 @@ export function getQustionStatList(
     params,
   });
 }
+
+export function getQuestionComponentStat(
+  questionId: string,
+  componentId: string
+) {
+  return request<Array<{ name: string; count: number }>>({
+    url: `/api/stat/${questionId}/${componentId}`,
+    method: "GET",
+  });
+}

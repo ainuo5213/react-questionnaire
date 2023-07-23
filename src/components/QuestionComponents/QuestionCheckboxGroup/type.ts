@@ -18,3 +18,12 @@ export const defaultCheckboxGroupProp: QustionCheckboxGroupPropType = {
     { value: "item2", text: "选项二", checked: false },
   ],
 };
+
+export type QuestionCheckboxGroupItemStateType = {
+  name: string;
+  count: number;
+};
+
+export type QuestionCheckboxGroupStatType = {
+  stat: Array<QuestionCheckboxGroupItemStateType>;
+};

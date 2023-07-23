@@ -38,16 +38,27 @@ function getAnswerStatList({ pageSize, questionnaireId }) {
 }
 export default [
   {
-    url: "/api/stat/:questioniId",
+    url: "/api/stat/:questionId",
     method: "get",
     response(ctx) {
-      const questionnaireId = Boolean(ctx.query.questionnaireId);
+      const questionnaireId = Boolean(ctx.query.questionId);
       const pageSize = Number(ctx.query.pageSize) || 10;
       const res = getAnswerStatList({ questionnaireId, pageSize });
       return new Reponse({
         total: 120,
         result: res,
       });
+    },
+  },
+  {
+    url: "/api/stat/:questionId/:componentId",
+    method: "get",
+    response(ctx) {
+      return new Reponse([
+        { name: "选项1", count: 20 },
+        { name: "选项2", count: 10 },
+        { name: "选项3", count: 25 },
+      ]);
     },
   },
 ];

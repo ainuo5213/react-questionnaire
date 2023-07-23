@@ -35,5 +35,10 @@
     background-color: #fff;
     overflow: hidden;
     padding: 12px 18px;
+    position: relative;
   }
+}
+
+.empty {
+  @include abs-center;
 }

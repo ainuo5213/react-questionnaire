@@ -5,6 +5,7 @@ import { Table } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import useComponentInfo from "../../hooks/useComponentInfo";
+import { getComponentConfigureByComponentType } from "@/components/QuestionComponents";
 
 type StatTablePropType = {
   selectedId: string;
@@ -44,27 +45,26 @@ export default function StatTable(props: StatTablePropType) {
   }, []);
   const { componentList } = useComponentInfo();
   const columns = useMemo(() => {
-    return componentList
-      .filter((r) => r.isFormItem)
-      .map((r) => {
-        return {
-          title: r.isStatistic ? (
-            <div key={r.fe_id} onClick={() => props.onSelect(r.fe_id)}>
-              <span
-                style={{
-                  color: r.fe_id === props.selectedId ? "#1890ff" : "inherit",
-                  cursor: "pointer",
-                }}
-              >
-                {r.props.title}
-              </span>
-            </div>
-          ) : (
-            r.props.title
-          ),
-          dataIndex: r.fe_id,
-        };
-      });
+    return componentList.map((r) => {
+      const componentConfigure = getComponentConfigureByComponentType(r.type);
+      return {
+        title: componentConfigure?.StatComponent ? (
+          <div key={r.fe_id} onClick={() => props.onSelect(r.fe_id)}>
+            <span
+              style={{
+                color: r.fe_id === props.selectedId ? "#1890ff" : "inherit",
+                cursor: "pointer",
+              }}
+            >
+              {r.props.title}
+            </span>
+          </div>
+        ) : (
+          r.props.title
+        ),
+        dataIndex: r.fe_id,
+      };
+    });
   }, [componentList, props.selectedId]);
   return (
     <Table

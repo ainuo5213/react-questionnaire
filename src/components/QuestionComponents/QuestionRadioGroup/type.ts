@@ -19,3 +19,9 @@ export const defaultRadioGroupProp: QustionRadioGroupPropType = {
   ],
   value: "",
 };
+
+export type QuestionRadioGroupItemStateType = { name: string; count: number };
+
+export type QuestionRadioGroupStatType = {
+  stat: Array<QuestionRadioGroupItemStateType>;
+};

@@ -8,8 +8,6 @@ export default [
     isHidden: false,
     isLocked: false,
     title: "个人信息调研",
-    isFormItem: false,
-    isStatistic: false,
     props: {
       text: "个人信息调研",
       level: 1,
@@ -21,8 +19,6 @@ export default [
     type: "questionInput",
     isHidden: false,
     isLocked: false,
-    isFormItem: true,
-    isStatistic: false,
     title: "输入框",
     props: {
       title: "输入框",
@@ -35,8 +31,6 @@ export default [
     isHidden: false,
     isLocked: false,
     title: "输入框2",
-    isFormItem: true,
-    isStatistic: false,
     props: {
       title: "输入框2",
       placeholder: "请输入你的电话",
@@ -48,8 +42,6 @@ export default [
     isHidden: false,
     isLocked: false,
     title: "这是一行段落",
-    isFormItem: false,
-    isStatistic: false,
     props: {
       text: "这是一行段落\ntest",
       isCenter: true,
@@ -61,8 +53,6 @@ export default [
     isHidden: false,
     isLocked: false,
     title: "多行输入",
-    isFormItem: true,
-    isStatistic: false,
     props: {
       title: "多行输入",
       placeholder: "请输入...",
@@ -70,12 +60,10 @@ export default [
   },
   {
     fe_id: "c6",
-    type: "questionTextArea",
+    type: "questionRadioGroup",
     isHidden: false,
     isLocked: false,
     title: "单选按钮组",
-    isFormItem: true,
-    isStatistic: true,
     props: {
       title: "性别",
       isVertical: false,

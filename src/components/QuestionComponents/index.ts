@@ -5,12 +5,14 @@ import QuestionTextAreaConfigure, {
 } from "./QuestionTextArea";
 import QuestionTitleConfigure, { QuestionTitlePropType } from "./QuestionTitle";
 import QuestionRadioGroupConfigure, {
+  QuestionRadioGroupStatType,
   QustionRadioGroupPropType,
 } from "./QuestionRadioGroup";
 import QuestionParagraphConfigue, {
   QuestionParagraphPropType,
 } from "./QuestionParagraph";
 import QuestionCheckboxGroupConfigure, {
+  QuestionCheckboxGroupStatType,
   QustionCheckboxGroupPropType,
 } from "./QuestionCheckboxGroup";
 
@@ -21,11 +23,16 @@ export type ComponentPropType = QustionInputPropType &
   QuestionParagraphPropType &
   QustionCheckboxGroupPropType;
 
+export type ComponentStatType = QuestionRadioGroupStatType &
+  QuestionCheckboxGroupStatType;
+
 export type ComponentConfigureType = {
   title: string;
   type: string;
   Component: React.Component<ComponentPropType>;
   defaultProps: ComponentPropType;
+  PropComponent: React.FC<ComponentPropType>;
+  StatComponent?: React.FC<ComponentStatType>;
 };
 
 const componentConfigureList = [
@@ -38,7 +45,9 @@ const componentConfigureList = [
 ];
 
 export function getComponentConfigureByComponentType(type: string) {
-  return componentConfigureList.find((r) => r.type === type);
+  return componentConfigureList.find((r) => r.type === type) as
+    | ComponentConfigureType
+    | undefined;
 }
 
 export const componentConfigureGroup = [

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuestionnaireDetail } from "../hooks/useQuestionnaire";
 import { Button, Result, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useRequest, useTitle } from "ahooks";
+import { useTitle } from "ahooks";
 import usePageInfo from "../hooks/usePageInfo";
 import styles from "./index.module.scss";
 import { PageStateType } from "@/store/reducer/question/page";
@@ -11,6 +11,8 @@ import StatCanvas from "./StatCanvas";
 import StatTable from "./StatTable";
 import useComponentInfo from "../hooks/useComponentInfo";
 import StatChart from "./StatChart";
+import { Empty } from "antd";
+import { getComponentConfigureByComponentType } from "@/components/QuestionComponents";
 function Loading() {
   return (
     <div style={{ textAlign: "center" }}>
@@ -49,6 +51,9 @@ function Content({ data }: { data: PageStateType }) {
       </div>
     );
   }
+  const componentConfig = getComponentConfigureByComponentType(
+    selectedComponentType
+  );
   return (
     <>
       <div className={styles.left}>
@@ -66,10 +71,17 @@ function Content({ data }: { data: PageStateType }) {
         ></StatTable>
       </div>
       <div className={styles.right}>
-        <StatChart
-          selectedId={selectedId}
-          selectedType={selectedComponentType}
-        ></StatChart>
+        {componentConfig ? (
+          <StatChart
+            selectedId={selectedId}
+            selectedType={selectedComponentType}
+          ></StatChart>
+        ) : (
+          <Empty
+            description="请选择可统计的组件"
+            className={styles.empty}
+          ></Empty>
+        )}
       </div>
     </>
   );
