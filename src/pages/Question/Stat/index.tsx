@@ -10,6 +10,7 @@ import StatHeader from "./StatHeader";
 import StatCanvas from "./StatCanvas";
 import StatTable from "./StatTable";
 import useComponentInfo from "../hooks/useComponentInfo";
+import StatChart from "./StatChart";
 function Loading() {
   return (
     <div style={{ textAlign: "center" }}>
@@ -64,7 +65,12 @@ function Content({ data }: { data: PageStateType }) {
           onSelect={setSelectedId}
         ></StatTable>
       </div>
-      <div className={styles.right}>right</div>
+      <div className={styles.right}>
+        <StatChart
+          selectedId={selectedId}
+          selectedType={selectedComponentType}
+        ></StatChart>
+      </div>
     </>
   );
 }
